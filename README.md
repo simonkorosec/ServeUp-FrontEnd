@@ -1,4 +1,8 @@
-# serveup
+# ServeUp Front-End
+
+This project was made in PHPstorm, to ensure everything works properly please use the latest version of **PHPstorm** or **WEBstorm** when opening and working on this project. 
+
+Check the [Wiki](https://github.com/simonkorosec/ServeUp-FrontEnd/wiki) for further information.
 
 ## Project setup
 ```
