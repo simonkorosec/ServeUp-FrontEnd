@@ -1,6 +1,6 @@
  <template>
   <div id="app">
-      
+
     <router-view/>
   </div>
 </template>
@@ -28,13 +28,13 @@ html,body{
   height: 100%;
   width: 100%;
 }
-.login_register{
+.login{
     background-color: white;
     width: 30%;
     height: 100%;
 }
 
-.login_register form{
+.login form{
     top: 50%;
     left: 50%;
     -moz-transform: translateX(-50%) translateY(-50%);
@@ -53,8 +53,14 @@ input[type=text]{
     padding: 10px 10px 10px 20px;
     width: 88%;
     margin: 3px 3px 6px;
+    color:#444444;
 }
-input[type=submit]{
+input[type=text]:focus{
+    outline: 1px solid #00c4ab;
+    outline-offset: -1px;
+    -moz-outline-radius:20px ;
+}
+button[type=button]{
     background-color: #00c4ab;
     border: none;
     border-radius: 20px;
@@ -62,6 +68,9 @@ input[type=submit]{
     width: 99%;
     margin: 3px;
     color:white;
+}
+button[type=button]:hover{
+    background-color: #00b39b;
 }
 .companyName{
     color:#00c4ab;
