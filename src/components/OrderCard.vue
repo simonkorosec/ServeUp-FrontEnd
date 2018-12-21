@@ -40,7 +40,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-    @import "../syles/variables";
+    @import "../styles/variables";
 
     .su-order-card {
         background: $su-color-yellow;
