@@ -24,5 +24,6 @@ export default {
     .su-order-item-body {
         display: flex;
         background: $su-color-primary;
+        margin: 4px;
     }
 </style>

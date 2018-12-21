@@ -1,8 +1,8 @@
 <template>
     <div class="su-order-card-body">
         <div class="su-order-card-header">
-            <p>{{arrivalTime}}</p>
-            <p>{{ownerName}}</p>
+            <p class="su-order-card-time">{{arrivalTime}}</p>
+            <p class="su-order-card-owner">{{ownerName}}</p>
             <p class="su-order-card-total">{{priceTotal}}</p>
         </div>
         <div class="su-order-card-items">
@@ -55,11 +55,24 @@ export default {
 <style lang="scss" scoped>
 @import "../styles/variables";
 
+@mixin layout-menu-last-end() {
+    padding-left: 16px;
+    padding-right: 16px;
+
+    :not(:last-child) {
+        margin-right: 16px;
+    }
+
+    :last-child {
+        color: #00AF46;
+        margin-left: auto;
+    }
+}
+
 div {
     display: flex;
     :not(.su-order-card-body) {
-        padding-left: 16px;
-        padding-right: 16px;
+
     }
 }
 
@@ -70,28 +83,20 @@ div {
     border-radius: 4px;
     overflow: hidden;
 
-    .su-order-card-header{
+    .su-order-card-header {
+        @include layout-menu-last-end;
         background: $su-color-yellow;
-
-        :last-child {
-            color: #00AF46;
-            margin-left: auto;
-        }
     }
 
     .su-order-card-items{
         background: $su-color-green;
         flex-direction: column;
+        padding: 8px;
     }
 
     .su-order-card-footer{
+        @include layout-menu-last-end;
         background: $su-color-red;
-        flex-direction: row;
-
-        :last-child {
-            color: #00AF46;
-            margin-left: auto;
-        }
     }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-<div class="orders">
+<div class="su-orders">
     <order-card v-for="card in orderCards" :key="card.orderId"
         :order-id="card.orderId"
         :arrival-time="card.arrivalTime"
