@@ -1,5 +1,9 @@
 <template>
-<div class="su-orders">
+<div id="su-orders">
+    <time-section>
+
+    </time-section>
+    <!--
     <order-card v-for="card in orderCards" :key="card.orderId"
         :order-id="card.orderId"
         :arrival-time="card.arrivalTime"
@@ -8,15 +12,17 @@
         :total-prep-time="card.totalPrepTime"
         :order-items="card.orderItems">
     </order-card>
+-->
 </div>
 </template>
 
 <script>
 import OrderCard from "../components/OrderCard";
+import TimeSection from "../components/TimeSection";
 
 export default {
 name: "Orders",
-components: {OrderCard},
+components: {TimeSection, OrderCard},
 data() {
     return {
         orderCards: [
@@ -42,6 +48,9 @@ data() {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+    #su-orders {
+        width: 100%;
+        height: 100%;
+    }
 </style>

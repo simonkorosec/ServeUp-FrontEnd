@@ -1,36 +1,43 @@
 <template>
-  <div class="home">
-
-  </div>
+    <div id="home">
+        <div id="nav">
+            <router-link to="/orders">Orders</router-link>
+            <router-link to="/orders">Orders</router-link>
+            <router-link to="/orders">Orders</router-link>
+        </div>
+        <router-view/>
+    </div>
 </template>
 
 <script>
-import OrderCard from "../components/OrderCard";
 
 export default {
     name:"Home",
-    components: {OrderCard},
     data() {
         return {
-            orderCards: [
-                {
-                    orderId: 0,
-                    arrivalTime: "10 15",
-                    ownerName: "Joe Doe",
-                    priceTotal: 20,
-                    totalPrepTime: 30,
-                    orderItems: [{amount: 10, name: "Pizza", prepTime: 20}, {amount: 19, name: "Taco", prepTime: 20}]
-                },
-                {
-                    orderId: 0,
-                    arrivalTime: "10 15",
-                    ownerName: "Joe Doe",
-                    priceTotal: 20,
-                    totalPrepTime: 30,
-                    orderItems: [{amount: 10, name: "Pizza", prepTime: 20}, {amount: 19, name: "Taco", prepTime: 20}]
-                }
-            ]
+
         }
     }
 }
 </script>
+
+<style lang="scss">
+    #home {
+        width: 100%;
+        height: 100%;
+        display: flex;
+    }
+
+    #nav {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        a {
+            font-weight: bold;
+            color: #2c3e50;
+            &.router-link-exact-active {
+                color: #42b983;
+            }
+        }
+    }
+</style>
