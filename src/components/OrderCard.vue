@@ -1,26 +1,48 @@
 <template>
-    <div class="orderCard">
+    <div class="su-order-card">
         <div>
-            <p></p>
+            <p>Prep {{totalPrepTime}}</p>
+            <p>Owner {{ownerName}}</p>
+            <p>Price {{priceTotal}}</p>
+        </div>
+        <div>
+            <order-card-item v-for="item in orderItems" :key="item" :item="item"></order-card-item>
         </div>
     </div>
 </template>
 
 <script>
+import OrderCardItem from "./OrderCardItem";
 export default {
-    name: "Card",
+    name: "OrderCard",
+    components: {OrderCardItem},
+    props: {
+        orderId: Number,
+        arrivalTime: String,
+        ownerName: String,
+        priceTotal: Number,
+        totalPrepTime: Number,
+        orderItems: Array
+    },
     data() {
         return {
-            arrivalTime: 0,
-            ownerName: "",
-            priceTotal: 0,
-            totalPrepTime: 0
+
         };
     },
+
     mounted() {
 
+    },
+
+    created() {
+        //this.orderItems = this.$children;
     }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+    @import "../syles/variables";
+
+    .su-order-card {
+        background: $su-color-yellow;
+    }
 </style>
