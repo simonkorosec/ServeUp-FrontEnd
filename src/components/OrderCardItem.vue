@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="su-order-item-body">
         <p>{{item.amount}}</p>
         <p>{{item.name}}</p>
         <p>{{item.prepTime}}</p>
@@ -18,6 +18,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import "../styles/variables";
 
+    .su-order-item-body {
+        display: flex;
+        background: $su-color-primary;
+    }
 </style>

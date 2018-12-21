@@ -1,13 +1,6 @@
 <template>
   <div class="home">
-      <order-card v-for="card in orderCards" :key="card.orderId"
-                  :order-id="card.orderId"
-                  :arrival-time="card.arrivalTime"
-                  :owner-name="card.ownerName"
-                  :price-total="card.priceTotal"
-                  :total-prep-time="card.totalPrepTime"
-                  :order-items="card.orderItems">
-      </order-card>
+
   </div>
 </template>
 
