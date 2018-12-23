@@ -1,6 +1,6 @@
 <template>
     <div class="su-order-item-body">
-        <p>{{item.amount}}</p>
+        <p>{{item.amount}}x</p>
         <p>{{item.name}}</p>
         <p>{{item.prepTime}}</p>
     </div>
@@ -23,7 +23,11 @@ export default {
 
     .su-order-item-body {
         display: flex;
-        background: $su-color-primary;
         margin: 4px;
+        @include su-mx-layout-menu-last-end;
+        @include su-mx-color-first-last-child(
+                        $su-color-dark-gray,
+                        $su-color-primary);
+
     }
 </style>

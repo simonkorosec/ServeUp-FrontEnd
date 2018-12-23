@@ -13,6 +13,7 @@
 
 <style lang="scss">
     @import url('https://fonts.googleapis.com/css?family=Roboto');
+    @import "./styles/variables";
 
     * {
         font-family: "Roboto", sans-serif;
@@ -32,5 +33,6 @@
         height: 100vh;
         flex-direction: row;
         margin: 0;
+        @include su-mx-scroll-bar;
     }
 </style>

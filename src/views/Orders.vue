@@ -1,7 +1,7 @@
 <template>
 <div id="su-orders">
-    <time-section>
-
+    <time-section v-for="(item, key) in timeSlots" :key="key"
+        :time-label="key" :order-cards="item">
     </time-section>
     <!--
     <order-card v-for="card in orderCards" :key="card.orderId"
@@ -17,62 +17,19 @@
 </template>
 
 <script>
-import OrderCard from "../components/OrderCard";
 import TimeSection from "../components/TimeSection";
 
 export default {
     name: "Orders",
-    components: {TimeSection, OrderCard},
+    components: {TimeSection},
     data() {
         return {
-            orderCards: [
-                {
-                    orderId: 0,
-                    arrivalTime: "10:15",
-                    ownerName: "Joe Doe",
-                    priceTotal: 20,
-                    totalPrepTime: 30,
-                    orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
-                },
-                {
-                    orderId: 1,
-                    arrivalTime: "10:31",
-                    ownerName: "Joe Bro",
-                    priceTotal: 20,
-                    totalPrepTime: 30,
-                    orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
-                },
-                {
-                    orderId: 2,
-                    arrivalTime: "10:15",
-                    ownerName: "Joe Bro",
-                    priceTotal: 20,
-                    totalPrepTime: 30,
-                    orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
-                },
-                {
-                    orderId: 3,
-                    arrivalTime: "11:31",
-                    ownerName: "Joe Bro",
-                    priceTotal: 20,
-                    totalPrepTime: 30,
-                    orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
-                },
-                {
-                    orderId: 4,
-                    arrivalTime: "11:00",
-                    ownerName: "Joe Bro",
-                    priceTotal: 20,
-                    totalPrepTime: 30,
-                    orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
-                },
-            ],
             timeSlots: {}
         }
     },
     methods: {
         // Assigns every order in the appropriate time slot
-        extractTimeSlots() {
+        /*extractTimeSlots() {
             self = this;
             this.orderCards.forEach(function (orderCard) {
                 let fullTime = "";
@@ -92,17 +49,90 @@ export default {
                 }
                 self.timeSlots[fullTime].push(orderCard);
             });
-        }
+        }*/
     },
-    mounted() {
-        this.extractTimeSlots();
+    created() {
+        // TODO AJAX call to get the cards from the server
+        let orderCards = [
+            {
+                orderId: 0,
+                arrivalTime: "10:15",
+                ownerName: "Joe Doe",
+                priceTotal: 20,
+                totalPrepTime: 30,
+                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
+            },
+            {
+                orderId: 1,
+                arrivalTime: "10:31",
+                ownerName: "Joe Bro",
+                priceTotal: 20,
+                totalPrepTime: 30,
+                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
+            },
+            {
+                orderId: 2,
+                arrivalTime: "10:15",
+                ownerName: "Joe Bro",
+                priceTotal: 20,
+                totalPrepTime: 30,
+                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
+            },
+            {
+                orderId: 3,
+                arrivalTime: "11:31",
+                ownerName: "Joe Bro",
+                priceTotal: 20,
+                totalPrepTime: 30,
+                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
+            },
+            {
+                orderId: 4,
+                arrivalTime: "11:00",
+                ownerName: "Joe Bro",
+                priceTotal: 20,
+                totalPrepTime: 30,
+                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
+            },
+        ];
+
+        // Else it doesn't work
+        self = this;
+
+        // Assigns each card from orderCards in the correct time slot
+        orderCards.forEach(function (orderCard) {
+            let fullTime = ""; // The time slot in which the card fits
+            let [hour, minute] = orderCard.arrivalTime.split(':');
+            fullTime += hour + ":";
+
+            // This can be changed depending on how long the time slots need to be
+            if (parseInt(minute, 10) < 30) {
+                fullTime += '00';
+            }
+            else {
+                fullTime += '30';
+            }
+
+            // If the time slot doesn't exist, make a new one
+            if (!(fullTime in self.timeSlots)) {
+                self.timeSlots[fullTime] = []
+            }
+            self.timeSlots[fullTime].push(orderCard);
+        });
+
+        //console.log(this.timeSlots);
     }
 }
 </script>
 
 <style lang="scss" scoped>
+    @import "../styles/variables";
+
     #su-orders {
         width: 100%;
         height: 100%;
+        background: $su-color-background;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 </style>
