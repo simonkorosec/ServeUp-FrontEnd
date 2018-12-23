@@ -29,6 +29,7 @@ export default {
     }
 
     #nav {
+        width: 15%;
         padding: 30px;
         display: flex;
         flex-direction: column;
