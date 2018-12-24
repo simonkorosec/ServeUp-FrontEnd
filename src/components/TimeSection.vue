@@ -1,25 +1,18 @@
 <template>
     <div class="su-time-section">
         <div class="su-time-section-divider" @click="toggleContent">
-            <p>{{timeLabel}}</p>
+            <p><slot name="timeLabel"></slot></p>
+            <!--<p>{{timeLabel}}</p>-->
         </div>
         <div class="su-time-section-container" v-if="visible">
             <div class="su-time-section-new">
-                <order-card v-for="card in localOrderCards" :key="card.orderId"
-                            :order-id="card.orderId"
-                            :arrival-time="card.arrivalTime"
-                            :owner-name="card.ownerName"
-                            :price-total="card.priceTotal"
-                            :total-prep-time="card.totalPrepTime"
-                            :order-items="card.orderItems">
-                    <p class="su-order-card-total">{{card.priceTotal}}$</p>
-                </order-card>
+                <slot name="new"></slot>
             </div>
             <div class="su-time-section-making">
-
+                <!--<slot name ="making"></slot>-->
             </div>
             <div class="su-time-section-ready">
-
+                <!--<slot name="ready"></slot>-->
             </div>
         </div>
     </div>
@@ -27,27 +20,17 @@
 </template>
 
 <script>
-    import OrderCard from "./OrderCard";
     export default {
         name: "TimeSection",
-        components: {OrderCard},
-        props:{
-            timeLabel: String,
-            orderCards: Array
-        },
         data() {
             return {
                 visible: true,
-                localOrderCards: []
             }
         },
         methods: {
             toggleContent() {
                 this.visible = !this.visible
             }
-        },
-        created() {
-            this.localOrderCards = this.orderCards;
         }
     }
 </script>

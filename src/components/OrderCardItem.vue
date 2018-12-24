@@ -1,20 +1,17 @@
 <template>
     <div class="su-order-item-body">
-        <p>{{item.amount}}x</p>
-        <p>{{item.name}}</p>
-        <p>{{item.prepTime}}</p>
+        <p><slot name="amount"></slot>x</p>
+        <p><slot name="foodName"></slot></p>
+        <p><slot name="prepTime"></slot></p>
+        <!--<p>{{item.amount}}x</p>-->
+        <!--<p>{{item.name}}</p>-->
+        <!--<p>{{item.prepTime}}</p>-->
     </div>
 </template>
 
 <script>
 export default {
     name: "OrderCardItem",
-    props: {
-        /*amount: {required: true},
-        name: {required: true},
-        prepTime: {required: true},*/
-        item: Object
-    },
 }
 </script>
 

@@ -1,7 +1,33 @@
 <template>
 <div id="su-orders">
-    <time-section v-for="(item, key) in timeSlots" :key="key"
-        :time-label="key" :order-cards="item">
+    <time-section v-for="(timeSlot, time) in timeSlots" :key="time">
+        <template slot="timeLabel">{{time}}</template>
+        <template slot="new">
+            <order-card v-for="card in timeSlot" :key="card.orderId">
+                <template slot="arrivalTime">{{card.arrivalTime}}</template>
+                <template slot="ownerName">{{card.ownerName}}</template>
+                <template slot="priceTotal">{{card.priceTotal}}</template>
+
+                <template slot="orderItems">
+                    <order-card-item v-for="item in card.orderItems" :key="item.id">
+                        <template slot="amount">{{item.amount}}</template>
+                        <template slot="foodName">{{item.name}}</template>
+                        <template slot="prepTime">{{item.prepTime}}</template>
+                    </order-card-item>
+                </template>
+
+                <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
+            </order-card>
+        </template>
+        <!--<order-card v-for="card in localOrderCards" :key="card.orderId"-->
+                    <!--:order-id="card.orderId"-->
+                    <!--:arrival-time="card.arrivalTime"-->
+                    <!--:owner-name="card.ownerName"-->
+                    <!--:price-total="card.priceTotal"-->
+                    <!--:total-prep-time="card.totalPrepTime"-->
+                    <!--:order-items="card.orderItems">-->
+            <!--<p class="su-order-card-total">{{card.priceTotal}}$</p>-->
+        <!--</order-card>-->
     </time-section>
     <!--
     <order-card v-for="card in orderCards" :key="card.orderId"
@@ -18,10 +44,12 @@
 
 <script>
 import TimeSection from "../components/TimeSection";
+import OrderCard from "../components/OrderCard";
+import OrderCardItem from "../components/OrderCardItem";
 
 export default {
     name: "Orders",
-    components: {TimeSection},
+    components: {OrderCardItem, OrderCard, TimeSection},
     data() {
         return {
             timeSlots: {}
