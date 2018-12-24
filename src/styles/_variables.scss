@@ -19,9 +19,9 @@ $su-color-light-gray: #C5BEBE;
 $su-color-dark-gray: #6D6D6D;
 
 /* Other colors */
-$su-color-red: #F30019;
-$su-color-yellow: #FFB300;
-$su-color-green: #00AF46;
+$su-color-red: #ffccce;
+$su-color-yellow: #ffe09e;
+$su-color-green: #bddfb8;
 
 /* **********************
   Corners, Borders and shadows
@@ -35,6 +35,19 @@ $su-border-radius-xl: 32px;
 
 // Shadows
 $su-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+$su-shadow-hover: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
+// Animations
+@keyframes su-a-shadow {
+  from {box-shadow: $su-shadow}
+  to {box-shadow: $su-shadow-hover}
+}
+
+@mixin su-mx-shadow-hover() {
+  animation-name: su-a-shadow;
+  animation-duration: 0.5s;
+  box-shadow: $su-shadow-hover;
+}
 
 /* **********************
   Mixins

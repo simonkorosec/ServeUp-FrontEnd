@@ -84,7 +84,7 @@ export default {
                 ownerName: "Joe Bro",
                 priceTotal: 20,
                 totalPrepTime: 30,
-                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
+                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}]
             },
             {
                 orderId: 4,
@@ -92,7 +92,7 @@ export default {
                 ownerName: "Joe Bro",
                 priceTotal: 20,
                 totalPrepTime: 30,
-                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
+                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}]
             },
         ];
 

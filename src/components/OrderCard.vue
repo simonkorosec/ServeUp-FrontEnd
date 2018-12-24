@@ -3,13 +3,14 @@
         <div class="su-order-card-header">
             <p class="su-order-card-time">{{arrivalTime}}</p>
             <p class="su-order-card-owner">{{ownerName}}</p>
-            <p class="su-order-card-total">{{priceTotal}}$</p>
+            <slot></slot>
+            <!--<p class="su-order-card-total">{{priceTotal}}$</p>-->
         </div>
         <div class="su-order-card-items">
             <order-card-item v-for="item in orderItems" :key="item.id" :item="item"></order-card-item>
         </div>
         <div class="su-order-card-footer">
-            <button>V PRIPRAVO</button>
+            <button @click="changeStatus">V PRIPRAVO</button>
             <p>{{totalPrepTime}}</p>
         </div>
     </div>
@@ -30,18 +31,27 @@ export default {
     },
     data() {
         return {
-
+            /*orderId: 0,
+            arrivalTime: "",
+            ownerName: "",
+            priceTotal: 0,
+            totalPrepTime: "",
+            orderItems: []*/
         };
     },
-    computed:{
+    /*computed:{
         total() {
             let result = this.orderItems.map(a => a.prepTime);
             return result;
         }
-    },
+    },*/
     methods: {
         getSum(total, num) {
             return total + num;
+        },
+        changeStatus() {
+            this.ownerName = "Ma boiii Joe";
+            console.log(this.ownerName)
         }
     },
     mounted() {
@@ -54,6 +64,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../styles/variables";
+
+@keyframes example {
+    from {background: red;}
+    to {background: yellow;}
+}
 
 div {
     display: flex;
@@ -69,6 +84,10 @@ div {
     box-shadow: $su-shadow;
     border-radius: $su-border-radius-m;
     overflow: hidden;
+    //@include su-shadow-hover;
+    &:hover {
+        @include su-mx-shadow-hover;
+    }
 
     .su-order-card-header {
         font-size: 1.2rem;
@@ -90,11 +109,20 @@ div {
     .su-order-card-footer{
         @include su-mx-layout-menu-last-end;
 
+        * {
+
+        }
+
+        :last-child {
+            color: $su-color-primary;
+            font-size: 1.2rem;
+        }
+
         button {
             margin-top: 8px;
             margin-bottom: 8px;
-            padding-left: 16px;
-            padding-right: 16px;
+            padding-left: 64px;
+            padding-right: 64px;
             background: $su-color-secondary;
             color: $su-color-content-light;
             box-shadow: $su-shadow;
@@ -104,6 +132,10 @@ div {
 
             &:active {
                 background: $su-color-secondary-dark;
+            }
+
+            &:hover {
+                @include su-mx-shadow-hover;
             }
         }
     }
