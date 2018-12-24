@@ -1,13 +1,17 @@
 <template>
 <div id="su-orders">
+    <!--For each timeSlot generate a new time section-->
     <time-section v-for="(timeSlot, time) in timeSlots" :key="time">
         <template slot="timeLabel">{{time}}</template>
-        <template slot="new">
-            <order-card v-for="card in timeSlot" :key="card.orderId">
+
+        <template slot="sectionNew">
+            <!--For each orderCard in that time section generate a new order card-->
+            <order-card v-for="card in timeSlot[0]" :key="card.orderId">
                 <template slot="arrivalTime">{{card.arrivalTime}}</template>
                 <template slot="ownerName">{{card.ownerName}}</template>
                 <template slot="priceTotal">{{card.priceTotal}}</template>
 
+                <!--For each order item in the orderCard generate a new order card item-->
                 <template slot="orderItems">
                     <order-card-item v-for="item in card.orderItems" :key="item.id">
                         <template slot="amount">{{item.amount}}</template>
@@ -19,26 +23,47 @@
                 <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
             </order-card>
         </template>
-        <!--<order-card v-for="card in localOrderCards" :key="card.orderId"-->
-                    <!--:order-id="card.orderId"-->
-                    <!--:arrival-time="card.arrivalTime"-->
-                    <!--:owner-name="card.ownerName"-->
-                    <!--:price-total="card.priceTotal"-->
-                    <!--:total-prep-time="card.totalPrepTime"-->
-                    <!--:order-items="card.orderItems">-->
-            <!--<p class="su-order-card-total">{{card.priceTotal}}$</p>-->
-        <!--</order-card>-->
+
+        <template slot="sectionMaking">
+            <!--For each orderCard in that time section generate a new order card-->
+            <order-card v-for="card in timeSlot[1]" :key="card.orderId">
+                <template slot="arrivalTime">{{card.arrivalTime}}</template>
+                <template slot="ownerName">{{card.ownerName}}</template>
+                <template slot="priceTotal">{{card.priceTotal}}</template>
+
+                <!--For each order item in the orderCard generate a new order card item-->
+                <template slot="orderItems">
+                    <order-card-item v-for="item in card.orderItems" :key="item.id">
+                        <template slot="amount">{{item.amount}}</template>
+                        <template slot="foodName">{{item.name}}</template>
+                        <template slot="prepTime">{{item.prepTime}}</template>
+                    </order-card-item>
+                </template>
+
+                <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
+            </order-card>
+        </template>
+
+        <template slot="sectionReady">
+            <!--For each orderCard in that time section generate a new order card-->
+            <order-card v-for="card in timeSlot[2]" :key="card.orderId">
+                <template slot="arrivalTime">{{card.arrivalTime}}</template>
+                <template slot="ownerName">{{card.ownerName}}</template>
+                <template slot="priceTotal">{{card.priceTotal}}</template>
+
+                <!--For each order item in the orderCard generate a new order card item-->
+                <template slot="orderItems">
+                    <order-card-item v-for="item in card.orderItems" :key="item.id">
+                        <template slot="amount">{{item.amount}}</template>
+                        <template slot="foodName">{{item.name}}</template>
+                        <template slot="prepTime">{{item.prepTime}}</template>
+                    </order-card-item>
+                </template>
+
+                <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
+            </order-card>
+        </template>
     </time-section>
-    <!--
-    <order-card v-for="card in orderCards" :key="card.orderId"
-        :order-id="card.orderId"
-        :arrival-time="card.arrivalTime"
-        :owner-name="card.ownerName"
-        :price-total="card.priceTotal"
-        :total-prep-time="card.totalPrepTime"
-        :order-items="card.orderItems">
-    </order-card>
--->
 </div>
 </template>
 
@@ -56,34 +81,17 @@ export default {
         }
     },
     methods: {
-        // Assigns every order in the appropriate time slot
-        /*extractTimeSlots() {
-            self = this;
-            this.orderCards.forEach(function (orderCard) {
-                let fullTime = "";
-                let [hour, minute] = orderCard.arrivalTime.split(':');
-                let x = 10;
-                fullTime += hour + ":";
-                
-                if (parseInt(minute, 10) < 30) {
-                    fullTime += '00';
-                }
-                else {
-                    fullTime += '30';
-                }
-                
-                if (!(fullTime in self.timeSlots)) {
-                    self.timeSlots[fullTime] = []
-                }
-                self.timeSlots[fullTime].push(orderCard);
-            });
-        }*/
+
+    },
+    computed: {
+
     },
     created() {
         // TODO AJAX call to get the cards from the server
         let orderCards = [
             {
                 orderId: 0,
+                orderStatus: 0,
                 arrivalTime: "10:15",
                 ownerName: "Joe Doe",
                 priceTotal: 20,
@@ -92,6 +100,7 @@ export default {
             },
             {
                 orderId: 1,
+                orderStatus: 0,
                 arrivalTime: "10:31",
                 ownerName: "Joe Bro",
                 priceTotal: 20,
@@ -100,6 +109,7 @@ export default {
             },
             {
                 orderId: 2,
+                orderStatus: 1,
                 arrivalTime: "10:15",
                 ownerName: "Joe Bro",
                 priceTotal: 20,
@@ -108,6 +118,7 @@ export default {
             },
             {
                 orderId: 3,
+                orderStatus: 2,
                 arrivalTime: "11:31",
                 ownerName: "Joe Bro",
                 priceTotal: 20,
@@ -116,6 +127,7 @@ export default {
             },
             {
                 orderId: 4,
+                orderStatus: 0,
                 arrivalTime: "11:00",
                 ownerName: "Joe Bro",
                 priceTotal: 20,
@@ -143,11 +155,12 @@ export default {
 
             // If the time slot doesn't exist, make a new one
             if (!(fullTime in self.timeSlots)) {
-                self.timeSlots[fullTime] = []
+                self.timeSlots[fullTime] = [[], [], []];
             }
-            self.timeSlots[fullTime].push(orderCard);
-        });
 
+            // Assign the order card to the correct column based on its status
+            self.timeSlots[fullTime][orderCard.orderStatus].push(orderCard);
+        });
         //console.log(this.timeSlots);
     }
 }

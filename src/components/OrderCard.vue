@@ -7,12 +7,10 @@
         </div>
         <div class="su-order-card-items">
             <slot name="orderItems"></slot>
-            <!--<order-card-item v-for="item in orderItems" :key="item.id" :item="item"></order-card-item>-->
         </div>
         <div class="su-order-card-footer">
             <button @click="changeStatus">V PRIPRAVO</button>
             <p><slot name="totalPrepTime"></slot></p>
-            <!--<p>{{totalPrepTime}}</p>-->
         </div>
     </div>
 </template>
@@ -22,8 +20,7 @@ export default {
     name: "OrderCard",
     methods: {
         changeStatus() {
-            this.ownerName = "Ma boiii Joe";
-            console.log(this.ownerName)
+
         }
     }
 };

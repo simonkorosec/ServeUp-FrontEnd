@@ -3,9 +3,6 @@
         <p><slot name="amount"></slot>x</p>
         <p><slot name="foodName"></slot></p>
         <p><slot name="prepTime"></slot></p>
-        <!--<p>{{item.amount}}x</p>-->
-        <!--<p>{{item.name}}</p>-->
-        <!--<p>{{item.prepTime}}</p>-->
     </div>
 </template>
 

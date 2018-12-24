@@ -2,17 +2,16 @@
     <div class="su-time-section">
         <div class="su-time-section-divider" @click="toggleContent">
             <p><slot name="timeLabel"></slot></p>
-            <!--<p>{{timeLabel}}</p>-->
         </div>
         <div class="su-time-section-container" v-if="visible">
             <div class="su-time-section-new">
-                <slot name="new"></slot>
+                <slot name="sectionNew"></slot>
             </div>
             <div class="su-time-section-making">
-                <!--<slot name ="making"></slot>-->
+                <slot name="sectionMaking"></slot>
             </div>
             <div class="su-time-section-ready">
-                <!--<slot name="ready"></slot>-->
+                <slot name="sectionReady"></slot>
             </div>
         </div>
     </div>
