@@ -33,81 +33,100 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../styles/variables";
+    @import "../styles/variables";
 
-@keyframes example {
-    from {background: red;}
-    to {background: yellow;}
-}
-
-div {
-    display: flex;
-    :not(.su-order-card-body) {
-
-    }
-}
-
-.su-order-card-body {
-    flex-direction: column;
-    margin: 32px;
-    background: $su-color-content-light;
-    box-shadow: $su-shadow;
-    border-radius: $su-border-radius-m;
-    overflow: hidden;
-    //@include su-shadow-hover;
-    &:hover {
-        @include su-mx-shadow-hover;
+    @keyframes example {
+        from {background: red;}
+        to {background: yellow;}
     }
 
-    .su-order-card-header {
-        font-size: 1.2rem;
-        @include su-mx-layout-menu-last-end;
-        @include su-mx-color-first-last-child(
-                        $su-color-primary,
-                        $su-color-primary);
+    div {
+        display: flex;
+        :not(.su-order-card-body) {
 
+        }
     }
 
-    .su-order-card-items{
+    .su-order-card-body {
         flex-direction: column;
-        margin-left: 16px;
-        margin-right: 16px;
-        border-top: 2px solid $su-color-light-gray;
-        border-bottom: 2px solid $su-color-light-gray;
-    }
-
-    .su-order-card-footer{
-        @include su-mx-layout-menu-last-end;
-
-        * {
-
+        margin: 32px;
+        background: $su-color-content-light;
+        box-shadow: $su-shadow;
+        border-radius: $su-border-radius-m;
+        overflow: hidden;
+        //@include su-shadow-hover;
+        &:hover {
+            @include su-mx-shadow-hover($su-shadow, $su-shadow-hover);
         }
 
-        :last-child {
-            color: $su-color-primary;
+        .su-order-card-header {
             font-size: 1.2rem;
+            @include su-mx-layout-menu-last-end;
+            @include su-mx-color-first-last-child(
+                            $su-color-primary,
+                            $su-color-primary);
+
         }
 
-        button {
-            margin-top: 8px;
-            margin-bottom: 8px;
-            padding-left: 64px;
-            padding-right: 64px;
-            background: $su-color-secondary;
-            color: $su-color-content-light;
-            box-shadow: $su-shadow;
-            border: none;
-            border-radius: $su-border-radius-m;
+        .su-order-card-items{
+            flex-direction: column;
+            margin-left: 16px;
+            margin-right: 16px;
+            border-top: 2px solid $su-color-light-gray;
+            border-bottom: 2px solid $su-color-light-gray;
+        }
 
+        .su-order-card-footer{
+            @include su-mx-layout-menu-last-end;
 
-            &:active {
-                background: $su-color-secondary-dark;
+            * {
+
             }
 
-            &:hover {
-                @include su-mx-shadow-hover;
+            :last-child {
+                color: $su-color-primary;
+                font-size: 1.2rem;
+            }
+
+            button {
+                margin-top: 8px;
+                margin-bottom: 8px;
+                padding-left: 64px;
+                padding-right: 64px;
+                background: $su-color-secondary;
+                color: $su-color-content-light;
+                box-shadow: $su-shadow;
+                border: none;
+                border-radius: $su-border-radius-m;
+
+
+                &:active {
+                    background: $su-color-secondary-dark;
+                }
+
+                &:hover {
+                    @include su-mx-shadow-hover($su-shadow, $su-shadow-hover);
+                }
             }
         }
     }
-}
+
+    .suHereNew {
+        border: 8px solid $su-color-secondary;
+        border-radius: 16px;
+        box-shadow: 0 0 16px $su-color-secondary;
+
+    }
+
+    .suHereMaking {
+        border: 8px solid $su-color-secondary;
+        border-radius: 16px;
+        box-shadow: 0 0 16px $su-color-secondary;
+    }
+
+    .suHereReady {
+        border: 8px solid $su-color-secondary;
+        border-radius: 16px;
+        box-shadow: 0 0 16px $su-color-secondary;
+    }
 </style>

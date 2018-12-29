@@ -69,15 +69,15 @@
             }
 
             .su-time-section-new {
-                background: $su-color-red;
+                background: $su-color-red-light;
             }
 
             .su-time-section-making {
-                background: $su-color-yellow;
+                background: $su-color-yellow-light;
             }
 
             .su-time-section-ready {
-                background: $su-color-green;
+                background: $su-color-green-light;
             }
         }
     }

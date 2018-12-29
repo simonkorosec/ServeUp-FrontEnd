@@ -6,7 +6,9 @@
 
         <template slot="sectionNew">
             <!--For each orderCard in that time section generate a new order card-->
-            <order-card v-for="card in timeSlot[0]" :key="card.orderId" :order-id="card.orderId">
+            <order-card v-for="card in timeSlot[0]" :key="card.orderId"
+                        :order-id="card.orderId"
+                        :class="{suHereNew: card.isHere}">
                 <template slot="arrivalTime">{{card.arrivalTime}}</template>
                 <template slot="ownerName">{{card.ownerName}}</template>
                 <template slot="priceTotal">{{card.priceTotal}}</template>
@@ -26,7 +28,9 @@
 
         <template slot="sectionMaking">
             <!--For each orderCard in that time section generate a new order card-->
-            <order-card v-for="card in timeSlot[1]" :key="card.orderId" :order-id="card.orderId">
+            <order-card v-for="card in timeSlot[1]" :key="card.orderId"
+                        :order-id="card.orderId"
+                        :class="{suHereMaking: card.isHere}">
                 <template slot="arrivalTime">{{card.arrivalTime}}</template>
                 <template slot="ownerName">{{card.ownerName}}</template>
                 <template slot="priceTotal">{{card.priceTotal}}</template>
@@ -46,7 +50,9 @@
 
         <template slot="sectionReady">
             <!--For each orderCard in that time section generate a new order card-->
-            <order-card v-for="card in timeSlot[2]" :key="card.orderId" :order-id="card.orderId">
+            <order-card v-for="card in timeSlot[2]" :key="card.orderId"
+                        :order-id="card.orderId"
+                        :class="{suHereReady: card.isHere}">
                 <template slot="arrivalTime">{{card.arrivalTime}}</template>
                 <template slot="ownerName">{{card.ownerName}}</template>
                 <template slot="priceTotal">{{card.priceTotal}}</template>
@@ -133,6 +139,7 @@ export default {
             0: {
                 orderId: 0,
                 orderStatus: 0,
+                isHere: true,
                 arrivalTime: "10:15",
                 ownerName: "Joe Doe",
                 priceTotal: 20,
@@ -142,6 +149,7 @@ export default {
             1: {
                 orderId: 1,
                 orderStatus: 0,
+                isHere: false,
                 arrivalTime: "10:31",
                 ownerName: "Joe Bro",
                 priceTotal: 20,
@@ -151,6 +159,7 @@ export default {
             2: {
                 orderId: 2,
                 orderStatus: 1,
+                isHere: false,
                 arrivalTime: "10:15",
                 ownerName: "Joe Bro",
                 priceTotal: 20,
@@ -160,6 +169,7 @@ export default {
             3: {
                 orderId: 3,
                 orderStatus: 2,
+                isHere: false,
                 arrivalTime: "11:31",
                 ownerName: "Joe Bro",
                 priceTotal: 20,
@@ -169,6 +179,7 @@ export default {
             4: {
                 orderId: 4,
                 orderStatus: 0,
+                isHere: false,
                 arrivalTime: "11:00",
                 ownerName: "Joe Bro",
                 priceTotal: 20,
