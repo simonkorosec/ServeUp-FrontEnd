@@ -79,6 +79,8 @@ import TimeSection from "../components/TimeSection";
 import OrderCard from "../components/OrderCard";
 import OrderCardItem from "../components/OrderCardItem";
 import {EventBus} from "../Events.js";
+import {serverUrl} from "../Events";
+import axios from "axios";
 
 export default {
     name: "Orders",
@@ -98,6 +100,22 @@ export default {
                     return false;
             }
             return true;
+        },
+        parseOrder(unparsedOrder) {
+            let unparsedTime = unparsedOrder.cas_prevzema.split("T")[1];
+            let parsedTime = unparsedTime.slice(0, unparsedTime.lastIndexOf(':'));
+            let parsedOrder = {
+                orderId: unparsedOrder.id_narocila,
+                orderStatus: unparsedOrder.status,
+                isHere: unparsedOrder.checked_in,
+                arrivalTime: parsedTime,
+                ownerName: unparsedOrder.id_uporabnik,
+                priceTotal: unparsedOrder.cena,
+                totalPrepTime: 'TODO',
+                // TODO parse the order items as well
+                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}]
+            };
+            return parsedOrder;
         }
     },
 
@@ -128,14 +146,13 @@ export default {
                 // Assign the order card to the correct column based on its status
                 timeSlots[fullTime][orderCard.orderStatus].push(orderCard);
             });
-            //console.log(this.timeSlots);
             return timeSlots;
         }
     },
 
     created() {
-        // TODO AJAX call to get the cards from the server
-        let orderCards = {
+     /*   // TODO AJAX call to get the cards from the server
+        let orderCardsTest = {
             0: {
                 orderId: 0,
                 orderStatus: 0,
@@ -187,8 +204,24 @@ export default {
                 orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}]
             },
         };
-
+        console.log('Order cards test', orderCardsTest);
+        this.orderCards = orderCardsTest;
+        console.log('This Order cards test', this.orderCards);
+        let orderCards = {};*/
+        let self = this;
+        axios.get(serverUrl + 'orders/?id_restavracija=6')
+            .then(function (response) {
+                console.log('Response data', response.data.data);
+                Object.keys(response.data.data).forEach(objectId => {
+                    let parsedOrder = self.parseOrder(response.data.data[objectId]);
+                    //orderCards[parsedOrder.orderId] = parsedOrder;
+                    self.$set(self.orderCards, parsedOrder.orderId, parsedOrder);
+                });
+            }
+        );
+       /* console.log('Order cards', orderCards);
         this.orderCards = orderCards;
+        console.log('This Order cards', this.orderCards);*/
     },
 
     mounted() {
