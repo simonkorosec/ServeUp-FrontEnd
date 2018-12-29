@@ -9,18 +9,25 @@
             <slot name="orderItems"></slot>
         </div>
         <div class="su-order-card-footer">
-            <button @click="changeStatus">V PRIPRAVO</button>
+            <button @click="changeStatusCard()">V PRIPRAVO</button>
             <p><slot name="totalPrepTime"></slot></p>
         </div>
     </div>
 </template>
 
 <script>
+import {EventBus} from "../Events";
+
 export default {
     name: "OrderCard",
+    props: {
+        orderId: Number
+    },
     methods: {
-        changeStatus() {
-
+        // Use the global event bus Event.js to emit
+        // the card's status has been changed
+        changeStatusCard() {
+            EventBus.$emit('changeStatus', this.orderId);
         }
     }
 };

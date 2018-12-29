@@ -4,7 +4,7 @@
             <p><slot name="timeLabel"></slot></p>
         </div>
         <div class="su-time-section-container" v-if="visible">
-            <div class="su-time-section-new">
+            <div class="su-time-section-new" >
                 <slot name="sectionNew"></slot>
             </div>
             <div class="su-time-section-making">
@@ -27,6 +27,7 @@
             }
         },
         methods: {
+            // Collapses or expands the time slot upon button click
             toggleContent() {
                 this.visible = !this.visible
             }
