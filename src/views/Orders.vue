@@ -1,76 +1,112 @@
 <template>
 <div id="su-orders">
-    <!--For each timeSlot generate a new time section-->
-    <time-section v-for="(timeSlot, time) in timeSlots" :key="time">
-        <template slot="timeLabel">{{time}}</template>
+    <div id="su-time-line-box">
+        <time-line v-for="(timeSlot, time) in timeSlots" :key="time">
+            <template slot="timeLabel">{{time}}</template>
 
-        <template slot="sectionNew">
-            <!--For each orderCard in that time section generate a new order card-->
-            <order-card v-for="card in timeSlot[0]" :key="card.orderId"
-                        :order-id="card.orderId"
-                        :class="{suHereNew: card.isHere}">
-                <template slot="arrivalTime">{{card.arrivalTime}}</template>
-                <template slot="ownerName">{{card.ownerName}}</template>
-                <template slot="priceTotal">{{card.priceTotal}}</template>
+            <template slot="sectionNew" class="su-time-line-item-new">
+                <time-line-item v-for="card in timeSlot[0]" :key="card.orderId"
+                                :order-id="card.orderId"
+                                :class="{suHere: card.isHere}"
+                                class="su-time-line-item-new">
+                </time-line-item>
+            </template>
 
-                <!--For each order item in the orderCard generate a new order card item-->
-                <template slot="orderItems">
-                    <order-card-item v-for="item in card.orderItems" :key="item.id">
-                        <template slot="amount">{{item.amount}}</template>
-                        <template slot="foodName">{{item.name}}</template>
-                        <template slot="prepTime">{{item.prepTime}}</template>
-                    </order-card-item>
-                </template>
+            <template slot="sectionMaking" class="su-time-line-item-making">
+                <time-line-item v-for="card in timeSlot[1]" :key="card.orderId"
+                                :order-id="card.orderId"
+                                :class="{suHere: card.isHere}"
+                                class="su-time-line-item-making">
+                </time-line-item>
+            </template>
 
-                <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
-            </order-card>
-        </template>
+            <template slot="sectionReady" class="su-time-line-item-new">
+                <time-line-item v-for="card in timeSlot[2]" :key="card.orderId"
+                                :order-id="card.orderId"
+                                :class="{suHere: card.isHere}"
+                                class="su-time-line-item-ready">
+                </time-line-item>
+            </template>
+        </time-line>
+        <div class="su-time-section-footer" v-if="!isEmpty(orderCards)"></div>
+    </div>
 
-        <template slot="sectionMaking">
-            <!--For each orderCard in that time section generate a new order card-->
-            <order-card v-for="card in timeSlot[1]" :key="card.orderId"
-                        :order-id="card.orderId"
-                        :class="{suHereMaking: card.isHere}">
-                <template slot="arrivalTime">{{card.arrivalTime}}</template>
-                <template slot="ownerName">{{card.ownerName}}</template>
-                <template slot="priceTotal">{{card.priceTotal}}</template>
+    <div id="su-time-section-box">
+        <!--For each timeSlot generate a new time section-->
+        <time-section v-for="(timeSlot, time) in timeSlots" :key="time">
+            <template slot="timeLabel">{{time}}</template>
 
-                <!--For each order item in the orderCard generate a new order card item-->
-                <template slot="orderItems">
-                    <order-card-item v-for="item in card.orderItems" :key="item.id" >
-                        <template slot="amount">{{item.amount}}</template>
-                        <template slot="foodName">{{item.name}}</template>
-                        <template slot="prepTime">{{item.prepTime}}</template>
-                    </order-card-item>
-                </template>
+            <template slot="sectionNew">
+                <!--For each orderCard in that time section generate a new order card-->
+                <order-card v-for="card in timeSlot[0]" :key="card.orderId"
+                            :order-id="card.orderId"
+                            :class="{suHereNew: card.isHere, highlighted: card.isHighlighted}"
+                            :id="'su-card-' + card.orderId">
+                    <template slot="arrivalTime">{{card.arrivalTime}}</template>
+                    <template slot="ownerName">{{card.ownerName}}</template>
+                    <template slot="priceTotal">{{card.priceTotal}}</template>
 
-                <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
-            </order-card>
-        </template>
+                    <!--For each order item in the orderCard generate a new order card item-->
+                    <template slot="orderItems">
+                        <order-card-item v-for="item in card.orderItems" :key="item.id">
+                            <template slot="amount">{{item.amount}}</template>
+                            <template slot="foodName">{{item.name}}</template>
+                            <template slot="prepTime">{{item.prepTime}}</template>
+                        </order-card-item>
+                    </template>
 
-        <template slot="sectionReady">
-            <!--For each orderCard in that time section generate a new order card-->
-            <order-card v-for="card in timeSlot[2]" :key="card.orderId"
-                        :order-id="card.orderId"
-                        :class="{suHereReady: card.isHere}">
-                <template slot="arrivalTime">{{card.arrivalTime}}</template>
-                <template slot="ownerName">{{card.ownerName}}</template>
-                <template slot="priceTotal">{{card.priceTotal}}</template>
+                    <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
+                </order-card>
+            </template>
 
-                <!--For each order item in the orderCard generate a new order card item-->
-                <template slot="orderItems">
-                    <order-card-item v-for="item in card.orderItems" :key="item.id">
-                        <template slot="amount">{{item.amount}}</template>
-                        <template slot="foodName">{{item.name}}</template>
-                        <template slot="prepTime">{{item.prepTime}}</template>
-                    </order-card-item>
-                </template>
+            <template slot="sectionMaking">
+                <!--For each orderCard in that time section generate a new order card-->
+                <order-card v-for="card in timeSlot[1]" :key="card.orderId"
+                            :order-id="card.orderId"
+                            :class="{suHereMaking: card.isHere, highlighted: card.isHighlighted}"
+                            :id="'su-card-' + card.orderId">
+                    <template slot="arrivalTime">{{card.arrivalTime}}</template>
+                    <template slot="ownerName">{{card.ownerName}}</template>
+                    <template slot="priceTotal">{{card.priceTotal}}</template>
 
-                <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
-            </order-card>
-        </template>
-    </time-section>
-    <div class="su-time-section-footer" v-if="!isEmpty(orderCards)"></div>
+                    <!--For each order item in the orderCard generate a new order card item-->
+                    <template slot="orderItems">
+                        <order-card-item v-for="item in card.orderItems" :key="item.id" >
+                            <template slot="amount">{{item.amount}}</template>
+                            <template slot="foodName">{{item.name}}</template>
+                            <template slot="prepTime">{{item.prepTime}}</template>
+                        </order-card-item>
+                    </template>
+
+                    <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
+                </order-card>
+            </template>
+
+            <template slot="sectionReady">
+                <!--For each orderCard in that time section generate a new order card-->
+                <order-card v-for="card in timeSlot[2]" :key="card.orderId"
+                            :order-id="card.orderId"
+                            :class="{suHereReady: card.isHere, highlighted: card.isHighlighted}"
+                            :id="'su-card-' + card.orderId">
+                    <template slot="arrivalTime">{{card.arrivalTime}}</template>
+                    <template slot="ownerName">{{card.ownerName}}</template>
+                    <template slot="priceTotal">{{card.priceTotal}}</template>
+
+                    <!--For each order item in the orderCard generate a new order card item-->
+                    <template slot="orderItems">
+                        <order-card-item v-for="item in card.orderItems" :key="item.id">
+                            <template slot="amount">{{item.amount}}</template>
+                            <template slot="foodName">{{item.name}}</template>
+                            <template slot="prepTime">{{item.prepTime}}</template>
+                        </order-card-item>
+                    </template>
+
+                    <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
+                </order-card>
+            </template>
+        </time-section>
+        <div class="su-time-section-footer" v-if="!isEmpty(orderCards)"></div>
+    </div>
 </div>
 </template>
 
@@ -81,14 +117,37 @@ import OrderCardItem from "../components/OrderCardItem";
 import {EventBus} from "../Events.js";
 import {serverUrl} from "../Events";
 import axios from "axios";
+import TimeLine from "../components/TimeLine";
+import TimeLineItem from "../components/TimeLineItem";
+import VueScrollTo from "vue-scrollto/src/directive";
 
 export default {
     name: "Orders",
 
-    components: {OrderCardItem, OrderCard, TimeSection},
+    components: {TimeLineItem, TimeLine, OrderCardItem, OrderCard, TimeSection},
     data() {
         return {
             orderCards: {},
+            // scrollOptions defines the way the scrolling behaves when clicking on
+            // a card on the TimeLine
+            scrollOptions: {
+                container: '#su-time-section-box', // element to scroll
+                easing: 'ease-in',
+                offset: -60,
+                force: true, // force scroll even if the object is in view
+                cancelable: true,
+                onStart: function(element) {
+                    //console.log('started scrolling')
+                },
+                onDone: function(element) {
+                    //console.log('stopped scrolling')
+                },
+                onCancel: function() {
+                    // scrolling has been interrupted
+                },
+                x: false,
+                y: true
+            },
         }
     },
 
@@ -101,10 +160,18 @@ export default {
             }
             return true;
         },
+
+
+        sleep(milliseconds) {
+            return new Promise(resolve => setTimeout(resolve, milliseconds));
+        },
+
+
         parseOrder(unparsedOrder) {
             let unparsedTime = unparsedOrder.cas_prevzema.split("T")[1];
             let parsedTime = unparsedTime.slice(0, unparsedTime.lastIndexOf(':'));
-            let parsedOrder = {
+
+            return {
                 orderId: unparsedOrder.id_narocila,
                 orderStatus: unparsedOrder.status,
                 isHere: unparsedOrder.checked_in,
@@ -112,10 +179,10 @@ export default {
                 ownerName: unparsedOrder.id_uporabnik,
                 priceTotal: unparsedOrder.cena,
                 totalPrepTime: 'TODO',
+                isHighlighted: false,
                 // TODO parse the order items as well
                 orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}]
             };
-            return parsedOrder;
         }
     },
 
@@ -203,25 +270,21 @@ export default {
                 totalPrepTime: 30,
                 orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}]
             },
-        };
-        console.log('Order cards test', orderCardsTest);
-        this.orderCards = orderCardsTest;
-        console.log('This Order cards test', this.orderCards);
-        let orderCards = {};*/
+        };*/
         let self = this;
         axios.get(serverUrl + 'orders/?id_restavracija=6')
             .then(function (response) {
+                // TODO remove log
                 console.log('Response data', response.data.data);
+                // Parse each card from the server response data and insert the parsed order
+                // in the view's orderCards dict
                 Object.keys(response.data.data).forEach(objectId => {
                     let parsedOrder = self.parseOrder(response.data.data[objectId]);
-                    //orderCards[parsedOrder.orderId] = parsedOrder;
+                    // Gotta use $set to make vue recognize the inserted object and make it reactive
                     self.$set(self.orderCards, parsedOrder.orderId, parsedOrder);
                 });
             }
         );
-       /* console.log('Order cards', orderCards);
-        this.orderCards = orderCards;
-        console.log('This Order cards', this.orderCards);*/
     },
 
     mounted() {
@@ -239,6 +302,25 @@ export default {
                 orderCard.orderStatus += 1;
             }
         });
+
+        // Determine what happens when the user highlights the tiny card in the TimeLine
+        EventBus.$on('highlight', async function(orderId) {
+            self.orderCards[orderId].isHighlighted = true;
+
+            let scrollId = '#su-card-' + orderId; // the ID of the object we scroll to
+            // .scrollTo(objectId, scrollSpeed, options);
+            VueScrollTo.scrollTo(scrollId, 200, self.scrollOptions);
+            //self.sleep(1000);
+            setTimeout(function () {
+                self.orderCards[orderId].isHighlighted = false;
+                console.log("timeout");
+            }, 1000);
+        });
+
+        // Determine what happens when the user un-highlights the tiny card in the TimeLine
+        /*EventBus.$on('unHighlight', orderId => {
+            self.orderCards[orderId].isHighlighted = false;
+        });*/
     }
 }
 </script>
@@ -247,11 +329,23 @@ export default {
     @import "../styles/variables";
 
     #su-orders {
+        display: flex;
         width: 100%;
         height: 100%;
         background: $su-color-background;
-        overflow-y: auto;
-        overflow-x: hidden;
+
+        #su-time-line-box {
+            flex: 1 0 max-content;
+            background: $su-color-primary-pale;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        #su-time-section-box {
+            flex: 8 1 auto;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
     }
 
     .su-time-section-footer {

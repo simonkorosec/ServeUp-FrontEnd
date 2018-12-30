@@ -1,5 +1,5 @@
 <template>
-    <div class="su-order-card-body">
+    <div class="su-order-card-body" :class="highlighted=isHighlighted">
         <div class="su-order-card-header">
             <p class="su-order-card-time"><slot name="arrivalTime"></slot></p>
             <p class="su-order-card-owner"><slot name="ownerName"></slot></p>
@@ -23,6 +23,11 @@ export default {
     props: {
         orderId: Number
     },
+    data() {
+      return {
+          isHighlighted: false,
+      }
+    },
     methods: {
         // Use the global event bus Event.js to emit
         // the card's status has been changed
@@ -35,9 +40,10 @@ export default {
 <style lang="scss" scoped>
     @import "../styles/variables";
 
-    @keyframes example {
-        from {background: red;}
-        to {background: yellow;}
+    @keyframes flash-animation {
+        0% { background: $su-color-content-light; }
+        50%   { background: $su-color-secondary; }
+        100%   {background: $su-color-content-light;}
     }
 
     div {
@@ -54,7 +60,7 @@ export default {
         box-shadow: $su-shadow;
         border-radius: $su-border-radius-m;
         overflow: hidden;
-        //@include su-shadow-hover;
+
         &:hover {
             @include su-mx-shadow-hover($su-shadow, $su-shadow-hover);
         }
@@ -128,5 +134,14 @@ export default {
         border: 8px solid $su-color-secondary;
         border-radius: 16px;
         box-shadow: 0 0 16px $su-color-secondary;
+    }
+
+    .highlighted {
+        /*.su-order-card-header {
+            background: lighten($su-color-primary, 50%);
+        }*/
+        animation-name: flash-animation;
+        animation-duration: 1s;
+        //@include su-mx-shadow-hover($su-shadow, $su-shadow-hover);
     }
 </style>
