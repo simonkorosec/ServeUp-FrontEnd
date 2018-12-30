@@ -53,7 +53,7 @@
             top: 0;
             left: 0;
             p {
-                margin: 4px;
+                margin: 8px;
                 font-weight: bold;
                 color: $su-color-dark-gray;
             }

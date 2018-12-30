@@ -17,11 +17,6 @@
                 console.log(this.orderId);
                 EventBus.$emit('highlight', this.orderId);
             },
-
-            unHighlightOrder() {
-                console.log("left", this.orderId);
-                EventBus.$emit('unHighlight', this.orderId);
-            }
         }
     }
 </script>

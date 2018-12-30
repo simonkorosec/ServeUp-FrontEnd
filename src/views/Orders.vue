@@ -161,28 +161,37 @@ export default {
             return true;
         },
 
-
-        sleep(milliseconds) {
-            return new Promise(resolve => setTimeout(resolve, milliseconds));
-        },
-
-
         parseOrder(unparsedOrder) {
+            // Extract the hh:mm part out of the API time code
             let unparsedTime = unparsedOrder.cas_prevzema.split("T")[1];
             let parsedTime = unparsedTime.slice(0, unparsedTime.lastIndexOf(':'));
 
-            return {
+            let parsedOrder = {
                 orderId: unparsedOrder.id_narocila,
                 orderStatus: unparsedOrder.status,
                 isHere: unparsedOrder.checked_in,
                 arrivalTime: parsedTime,
                 ownerName: unparsedOrder.id_uporabnik,
                 priceTotal: unparsedOrder.cena,
-                totalPrepTime: 'TODO',
+                totalPrepTime: 0,
                 isHighlighted: false,
                 // TODO parse the order items as well
-                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}]
+                orderItems: [/*{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}*/]
             };
+
+            // parse the orderItems
+            Object.keys(unparsedOrder.jedi).forEach(indexJedi => {
+                let unparsedItem = unparsedOrder.jedi[indexJedi];
+                parsedOrder.totalPrepTime += unparsedItem.cena // TODO prep time namesto cena
+                parsedOrder.orderItems.push({
+                    id: unparsedItem.id_jed,
+                    amount: unparsedItem.kolicina,
+                    name: unparsedItem.ime_jedi,
+                    prepTime: unparsedItem.cena // TODO prep time namesto cena
+                });
+            });
+
+            return parsedOrder;
         }
     },
 
@@ -218,59 +227,6 @@ export default {
     },
 
     created() {
-     /*   // TODO AJAX call to get the cards from the server
-        let orderCardsTest = {
-            0: {
-                orderId: 0,
-                orderStatus: 0,
-                isHere: true,
-                arrivalTime: "10:15",
-                ownerName: "Joe Doe",
-                priceTotal: 20,
-                totalPrepTime: 30,
-                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
-            },
-            1: {
-                orderId: 1,
-                orderStatus: 0,
-                isHere: false,
-                arrivalTime: "10:31",
-                ownerName: "Joe Bro",
-                priceTotal: 20,
-                totalPrepTime: 30,
-                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
-            },
-            2: {
-                orderId: 2,
-                orderStatus: 1,
-                isHere: false,
-                arrivalTime: "10:15",
-                ownerName: "Joe Bro",
-                priceTotal: 20,
-                totalPrepTime: 30,
-                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20}]
-            },
-            3: {
-                orderId: 3,
-                orderStatus: 2,
-                isHere: false,
-                arrivalTime: "11:31",
-                ownerName: "Joe Bro",
-                priceTotal: 20,
-                totalPrepTime: 30,
-                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}]
-            },
-            4: {
-                orderId: 4,
-                orderStatus: 0,
-                isHere: false,
-                arrivalTime: "11:00",
-                ownerName: "Joe Bro",
-                priceTotal: 20,
-                totalPrepTime: 30,
-                orderItems: [{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}]
-            },
-        };*/
         let self = this;
         axios.get(serverUrl + 'orders/?id_restavracija=6')
             .then(function (response) {
@@ -288,9 +244,12 @@ export default {
     },
 
     mounted() {
+        // the this of the vue object is not accessible inside other functions
+        // in order to be acceded it must be stored in a variable
+        self = this;
+
         // When a status of the card is changed intercept the event
         // and move the card in the next status group (New => Cooking => Ready => Done)
-        self = this;
         EventBus.$on('changeStatus', orderId => {
             let orderCard = self.orderCards[orderId];
             // If the current status is Ready, remove the card from the list
@@ -310,17 +269,12 @@ export default {
             let scrollId = '#su-card-' + orderId; // the ID of the object we scroll to
             // .scrollTo(objectId, scrollSpeed, options);
             VueScrollTo.scrollTo(scrollId, 200, self.scrollOptions);
-            //self.sleep(1000);
+            // The user has to wait 1 second, before they can highlight the item again
             setTimeout(function () {
                 self.orderCards[orderId].isHighlighted = false;
                 console.log("timeout");
             }, 1000);
         });
-
-        // Determine what happens when the user un-highlights the tiny card in the TimeLine
-        /*EventBus.$on('unHighlight', orderId => {
-            self.orderCards[orderId].isHighlighted = false;
-        });*/
     }
 }
 </script>
