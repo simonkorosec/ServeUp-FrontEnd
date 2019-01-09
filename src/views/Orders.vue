@@ -128,6 +128,8 @@ export default {
     data() {
         return {
             orderCards: {},
+            // How often to refresh the page after the initial load, refresh function located in mounted
+            refreshInterval: 5000, // milliseconds
             // scrollOptions defines the way the scrolling behaves when clicking on
             // a card on the TimeLine
             scrollOptions: {
@@ -275,6 +277,35 @@ export default {
                 console.log("timeout");
             }, 1000);
         });
+
+        // TODO Periodically refresh the page with new orders from the server
+        /*setInterval(function () {
+            let self = this;
+            axios.get(serverUrl + 'orders/refresh/?id_restavracija=6')
+                .then(function (response) {
+                    console.log('Refresh data', response.data);
+                    if (response.data.new_orders.length !== 0){
+                        // TODO remove log
+                        console.log('Refresh data', response.data);
+                        // Parse each card from the server response data and insert the parsed order
+                        // in the view's orderCards dict
+                        Object.keys(response.data.new_orders).forEach(objectId => {
+                            let parsedOrder = self.parseOrder(response.data.new_orders[objectId]);
+                            // Gotta use $set to make vue recognize the inserted object and make it reactive
+                            self.$set(self.orderCards, parsedOrder.orderId, parsedOrder);
+                        });
+                    }
+                    if (response.data.cancelled_orders.length !== 0) {
+                        response.data.cancelled_orders.forEach(orderId => {
+                            self.$delete(this.orderCards, orderId);
+                        });
+                    }
+                }
+                ).catch(function (error) {
+                    console.log('refresh error', error);
+                });
+        }, this.refreshInterval);*/
+
     }
 }
 </script>
