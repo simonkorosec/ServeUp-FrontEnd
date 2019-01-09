@@ -1,16 +1,16 @@
 <template>
-    <div class="su-time-line">
-        <div class="su-time-line-divider" @click="toggleContent">
+    <div class="su-time-section">
+        <div class="su-time-section-divider" @click="toggleContent">
             <p><slot name="timeLabel"></slot></p>
         </div>
-        <div class="su-time-line-container" v-if="visible">
-            <div class="su-time-line-new" >
+        <div class="su-time-section-container" v-if="visible">
+            <div class="su-time-section-new" >
                 <slot name="sectionNew"></slot>
             </div>
-            <div class="su-time-line-making">
+            <div class="su-time-section-making">
                 <slot name="sectionMaking"></slot>
             </div>
-            <div class="su-time-line-ready">
+            <div class="su-time-section-ready">
                 <slot name="sectionReady"></slot>
             </div>
         </div>
@@ -20,7 +20,7 @@
 
 <script>
     export default {
-        name: "TimeLine",
+        name: "TimeSection",
         data() {
             return {
                 visible: true,
@@ -36,51 +36,47 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../styles/variables";
+    @import "../../styles/variables";
 
-    .su-time-line {
+    .su-time-section {
         width: 100%;
         display: flex;
         flex-direction: column;
 
-        .su-time-line-divider {
+        .su-time-section-divider {
             position: sticky;
             background: $su-color-content-light;
             box-shadow: $su-shadow;
             z-index: 10;
             width: 100%;
-            min-width: 9rem;
             top: 0;
             left: 0;
             p {
-                margin: 8px;
                 font-weight: bold;
                 color: $su-color-dark-gray;
             }
         }
 
-        .su-time-line-container {
+        .su-time-section-container {
             display: flex;
             align-content: stretch;
             align-items: stretch;
             width: 100%;
             height: 100%;
 
-            > div {
-                width: 4rem;
-                flex: 1 0;
+            div {
+                flex: 1;
             }
 
-
-            .su-time-line-new {
+            .su-time-section-new {
                 background: $su-color-red-light;
             }
 
-            .su-time-line-making {
+            .su-time-section-making {
                 background: $su-color-yellow-light;
             }
 
-            .su-time-line-ready {
+            .su-time-section-ready {
                 background: $su-color-green-light;
             }
         }

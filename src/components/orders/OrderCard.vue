@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {EventBus} from "../Events";
+import {EventBus} from "../../Events";
 
 export default {
     name: "OrderCard",
@@ -38,7 +38,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-    @import "../styles/variables";
+    @import "../../styles/variables";
 
     @keyframes flash-animation {
         0% { background: $su-color-content-light; }

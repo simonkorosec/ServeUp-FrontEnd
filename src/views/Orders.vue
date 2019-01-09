@@ -111,14 +111,14 @@
 </template>
 
 <script>
-import TimeSection from "../components/TimeSection";
-import OrderCard from "../components/OrderCard";
-import OrderCardItem from "../components/OrderCardItem";
+import TimeSection from "../components/orders/TimeSection";
+import OrderCard from "../components/orders/OrderCard";
+import OrderCardItem from "../components/orders/OrderCardItem";
 import {EventBus} from "../Events.js";
 import {serverUrl} from "../Events";
 import axios from "axios";
-import TimeLine from "../components/TimeLine";
-import TimeLineItem from "../components/TimeLineItem";
+import TimeLine from "../components/orders/TimeLine";
+import TimeLineItem from "../components/orders/TimeLineItem";
 import VueScrollTo from "vue-scrollto/src/directive";
 
 export default {

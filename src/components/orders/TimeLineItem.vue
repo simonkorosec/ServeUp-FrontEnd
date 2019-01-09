@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import {EventBus} from "../Events";
+    import {EventBus} from "../../Events";
 
     export default {
         name: "TimeLineItem",
@@ -22,7 +22,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../styles/variables";
+    @import "../../styles/variables";
 
     .su-time-line-item {
         display: flex;
