@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Orders from "./views/Orders.vue"
+import History from "./views/History.vue"
 
 Vue.use(Router);
 
@@ -22,10 +23,15 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/About.vue")
     },
-      {
-          path: "/orders",
-          name: "orders",
-          component: Orders
-      },
+    {
+        path: "/orders",
+        name: "orders",
+        component: Orders
+    },
+    {
+      path: "/history",
+      name: "history",
+      component: History
+    },
   ]
 });

@@ -1,7 +1,6 @@
 
 <template>
-    <div class="su-time-line-item"
-         @click="highlightOrder()"></div>
+    <div class="su-time-line-item" @click="highlightOrder()"></div>
 </template>
 
 <script>
@@ -28,10 +27,7 @@
         display: flex;
         height: 2.5rem;
         border-radius: 0.2rem;
-        margin-top: 16px;
-        margin-bottom: 16px;
-        margin-right: 8px;
-        margin-left: 8px;
+        margin: 16px 8px;
 
         &:hover {
             @include su-mx-shadow-hover($su-shadow, $su-shadow-hover);

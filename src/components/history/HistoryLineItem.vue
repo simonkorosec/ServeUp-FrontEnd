@@ -1,0 +1,50 @@
+<template>
+    <div class="su-history-line-item-wrapper">
+        <div class="su-history-line-item" @click="highlightOrder()"></div>
+    </div>
+</template>
+
+<script>
+    import {EventBus} from "../../Events";
+
+    export default {
+        name: "HistoryLineItem",
+
+        props: {
+            orderId: Number
+        },
+
+        methods: {
+            highlightOrder() {
+                console.log(this.orderId);
+                EventBus.$emit('highlightHis', this.orderId);
+            },
+        }
+    }
+</script>
+
+<style lang="scss" scoped>
+    @import "../../styles/variables";
+
+    .su-history-line-item-wrapper {
+        margin: 0;
+        min-width: 25%;
+        max-width: 25%;
+        height: 3rem;
+        padding: 8px;
+
+        .su-history-line-item {
+            background: $su-color-content-light;
+            width: 100%;
+            height: 100%;
+            /*display: flex;
+            height: 2.5rem;
+            border-radius: 0.2rem;
+            margin: 16px 8px;*/
+
+            &:hover {
+                @include su-mx-shadow-hover($su-shadow, $su-shadow-hover);
+            }
+        }
+    }
+</style>

@@ -70,13 +70,12 @@ $su-shadow-hover: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 
   /* Track */
   ::-webkit-scrollbar-track {
-    background: $su-color-primary-pale;
+    background: $su-color-light-gray;
   }
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: $su-color-primary-dark;
-    border-radius: $su-border-radius-l;
+    background: $su-color-dark-gray;
   }
 
   /* Handle on hover */

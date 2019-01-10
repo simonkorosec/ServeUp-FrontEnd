@@ -9,7 +9,7 @@
             <slot name="orderItems"></slot>
         </div>
         <div class="su-order-card-footer">
-            <button @click="changeStatusCard()">V PRIPRAVO</button>
+            <button @click="changeStatusCard()">NASLEDNJI KORAK</button>
             <p><slot name="totalPrepTime"></slot></p>
         </div>
     </div>
@@ -137,11 +137,7 @@ export default {
     }
 
     .highlighted {
-        /*.su-order-card-header {
-            background: lighten($su-color-primary, 50%);
-        }*/
         animation-name: flash-animation;
         animation-duration: 1s;
-        //@include su-mx-shadow-hover($su-shadow, $su-shadow-hover);
     }
 </style>

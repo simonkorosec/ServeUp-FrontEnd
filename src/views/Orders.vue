@@ -127,9 +127,10 @@ export default {
     name: "Orders",
 
     components: {TimeLineItem, TimeLine, OrderCardItem, OrderCard, TimeSection},
+
     data() {
         return {
-            orderCards: {},
+            orderCards: [],
             // How often to refresh the page after the initial load, refresh function located in mounted
             refreshInterval: 5000, // milliseconds
             // scrollOptions defines the way the scrolling behaves when clicking on
@@ -152,6 +153,37 @@ export default {
                 x: false,
                 y: true
             },
+        }
+    },
+
+    computed: {
+        // Builds an array of time slots out of orders
+        // Structure: timeSlots{timeSlot1[New][Cooking][Ready], timeSlot2[New][Cooking][Ready], ...}
+        timeSlots: function () {
+            let timeSlots = {};
+            this.orderCards.forEach(orderCard => {
+                let fullTime = orderCard.arrivalTime;// The time slot in which the card fits
+                fullTime.setSeconds(0);
+
+                // Decides in which time slot the card fits
+                // This can be changed depending on how long the time slots need to be
+                if (fullTime.getMinutes() < 30) {
+                    fullTime.setMinutes(0);
+                }
+                else {
+                    fullTime.setMinutes(30);
+                }
+
+                // If the time slot doesn't exist, make a new one
+                if (!(fullTime in timeSlots)) {
+                    timeSlots[fullTime] = [[/*New*/], [/*Cooking*/], [/*Ready*/], this.getDisplayTime(fullTime)];
+                }
+
+                // Assign the order card to the correct column based on its status
+                timeSlots[fullTime][orderCard.orderStatus].unshift(orderCard);
+            });
+
+            return timeSlots;
         }
     },
 
@@ -202,48 +234,7 @@ export default {
         // so it can be displayed in the DOM
         getDisplayTime(time) {
             return "" + time.getHours() + ":" + ('0' + time.getMinutes()).slice(-2);
-        }
-    },
-
-    computed: {
-        sortedOrderIds: function () {
-            let sortedIds = [];
-
         },
-
-        // Builds an array of time slots out of orders
-        // Structure: timeSlots{timeSlot1[New][Cooking][Ready], timeSlot2[New][Cooking][Ready], ...}
-        timeSlots: function () {
-            let timeSlots = {};
-            Object.keys(this.orderCards).forEach(orderId => {
-                let orderCard = this.orderCards[orderId];
-                let fullTime = orderCard.arrivalTime;// The time slot in which the card fits
-                fullTime.setSeconds(0);
-
-                // Decides in which time slot the card fits
-                // This can be changed depending on how long the time slots need to be
-                if (fullTime.getMinutes() < 30) {
-                    fullTime.setMinutes(0);
-                }
-                else {
-                    fullTime.setMinutes(30);
-                }
-
-                // If the time slot doesn't exist, make a new one
-                if (!(fullTime in timeSlots)) {
-                    timeSlots[fullTime] = [[/*New*/], [/*Cooking*/], [/*Ready*/], this.getDisplayTime(fullTime)];
-                }
-
-                // Assign the order card to the correct column based on its status
-                timeSlots[fullTime][orderCard.orderStatus].unshift(orderCard);
-            });
-
-            let orderedSlots = {};
-            _(timeSlots).keys().sort().each(function (key) {
-                orderedSlots[key] = timeSlots[key];
-            });
-            return orderedSlots;
-        }
     },
 
     created() {
@@ -255,9 +246,14 @@ export default {
                 // Parse each card from the server response data and insert the parsed order
                 // in the view's orderCards dict
                 Object.keys(response.data.data).forEach(objectId => {
-                    let parsedOrder = self.parseOrder(response.data.data[objectId]);
-                    // Gotta use $set to make vue recognize the inserted object and make it reactive
-                    self.$set(self.orderCards, parsedOrder.orderId, parsedOrder);
+                    if (response.data.data[objectId].status !== 3) {
+                        let parsedOrder = self.parseOrder(response.data.data[objectId]);
+                        self.orderCards.push(parsedOrder);
+                    }
+                });
+
+                self.orderCards.sort(function (card1, card2) {
+                    return card1.arrivalTime - card2.arrivalTime;
                 });
             }
         );
@@ -271,19 +267,22 @@ export default {
         // When a status of the card is changed intercept the event
         // and move the card in the next status group (New => Cooking => Ready => Done)
         EventBus.$on('changeStatus', orderId => {
-            let orderCard = self.orderCards[orderId];
+            let clickedOrderCard = self.orderCards.filter(orderCard => {
+                return orderCard.orderId === orderId;
+            })[0];
             // If the current status is Ready, remove the card from the list
-            if (orderCard.orderStatus === 2) {
+            if (clickedOrderCard.orderStatus === 2) {
                 this.$delete(self.orderCards, orderId);
             }
             // Else move it in the next status group
             else {
-                orderCard.orderStatus += 1;
+                clickedOrderCard.orderStatus += 1;
             }
 
+            // Update the server
             axios.post(serverUrl + 'orders/status_update/', {
-                id_narocilo: orderCard.orderId,
-                status: orderCard.orderStatus
+                id_narocilo: clickedOrderCard.orderId,
+                status: clickedOrderCard.orderStatus
             }).then(function (response) {
                 console.log(response);
             }).catch(function (error) {
@@ -293,20 +292,21 @@ export default {
 
         // Determine what happens when the user highlights the tiny card in the TimeLine
         EventBus.$on('highlight', async function(orderId) {
-            self.orderCards[orderId].isHighlighted = true;
-
+            let clickedOrderCard = self.orderCards.filter(orderCard => {
+                return orderCard.orderId === orderId;
+            })[0];
+            clickedOrderCard.isHighlighted = true;
             let scrollId = '#su-card-' + orderId; // the ID of the object we scroll to
-            // .scrollTo(objectId, scrollSpeed, options);
             VueScrollTo.scrollTo(scrollId, 200, self.scrollOptions);
             // The user has to wait 1 second, before they can highlight the item again
             setTimeout(function () {
-                self.orderCards[orderId].isHighlighted = false;
+                clickedOrderCard.isHighlighted = false;
                 console.log("timeout");
             }, 1000);
         });
 
         // TODO Periodically refresh the page with new orders from the server
-        setInterval(function () {
+        /*setInterval(function () {
             let self = this;
             axios.get(serverUrl + 'orders/refresh/?id_restavracija=6')
                 .then(function (response) {
@@ -332,7 +332,7 @@ export default {
                 ).catch(function (error) {
                     console.log('refresh error', error);
                 });
-        }, this.refreshInterval);
+        }, this.refreshInterval);*/
 
     }
 }

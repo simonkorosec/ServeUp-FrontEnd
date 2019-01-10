@@ -1,21 +1,22 @@
 <template>
-    <div class="su-order-item-body">
+    <div class="su-history-item-body">
         <p><slot name="amount"></slot>x</p>
         <p><slot name="foodName"></slot></p>
-        <p><slot name="prepTime"></slot></p>
+        <p><slot name="price"></slot>$</p>
     </div>
 </template>
 
 <script>
-export default {
-    name: "OrderCardItem",
-}
+    export default {
+        name: "HistoryCardItem"
+    }
 </script>
 
 <style lang="scss" scoped>
     @import "../../styles/variables";
 
-    .su-order-item-body {
+    .su-history-item-body {
+
         display: flex;
         margin: 0;
         @include su-mx-layout-menu-last-end;
