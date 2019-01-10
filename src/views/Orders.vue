@@ -2,7 +2,7 @@
 <div id="su-orders">
     <div id="su-time-line-box">
         <time-line v-for="(timeSlot, time) in timeSlots" :key="time">
-            <template slot="timeLabel">{{time}}</template>
+            <template slot="timeLabel">{{timeSlot[3]}}</template>
 
             <template slot="sectionNew" class="su-time-line-item-new">
                 <time-line-item v-for="card in timeSlot[0]" :key="card.orderId"
@@ -34,7 +34,8 @@
     <div id="su-time-section-box">
         <!--For each timeSlot generate a new time section-->
         <time-section v-for="(timeSlot, time) in timeSlots" :key="time">
-            <template slot="timeLabel">{{time}}</template>
+            <!--timeSlot[3] is the display time-->
+            <template slot="timeLabel">{{timeSlot[3]}}</template>
 
             <template slot="sectionNew">
                 <!--For each orderCard in that time section generate a new order card-->
@@ -42,7 +43,7 @@
                             :order-id="card.orderId"
                             :class="{suHereNew: card.isHere, highlighted: card.isHighlighted}"
                             :id="'su-card-' + card.orderId">
-                    <template slot="arrivalTime">{{card.arrivalTime}}</template>
+                    <template slot="arrivalTime">{{card.displayTime}}</template>
                     <template slot="ownerName">{{card.ownerName}}</template>
                     <template slot="priceTotal">{{card.priceTotal}}</template>
 
@@ -65,7 +66,7 @@
                             :order-id="card.orderId"
                             :class="{suHereMaking: card.isHere, highlighted: card.isHighlighted}"
                             :id="'su-card-' + card.orderId">
-                    <template slot="arrivalTime">{{card.arrivalTime}}</template>
+                    <template slot="arrivalTime">{{card.displayTime}}</template>
                     <template slot="ownerName">{{card.ownerName}}</template>
                     <template slot="priceTotal">{{card.priceTotal}}</template>
 
@@ -88,7 +89,7 @@
                             :order-id="card.orderId"
                             :class="{suHereReady: card.isHere, highlighted: card.isHighlighted}"
                             :id="'su-card-' + card.orderId">
-                    <template slot="arrivalTime">{{card.arrivalTime}}</template>
+                    <template slot="arrivalTime">{{card.displayTime}}</template>
                     <template slot="ownerName">{{card.ownerName}}</template>
                     <template slot="priceTotal">{{card.priceTotal}}</template>
 
@@ -165,15 +166,12 @@ export default {
         },
 
         parseOrder(unparsedOrder) {
-            // Extract the hh:mm part out of the API time code
-            let unparsedTime = unparsedOrder.cas_prevzema.split("T")[1];
-            let parsedTime = unparsedTime.slice(0, unparsedTime.lastIndexOf(':'));
-
             let parsedOrder = {
                 orderId: unparsedOrder.id_narocila,
                 orderStatus: unparsedOrder.status,
                 isHere: unparsedOrder.checked_in,
-                arrivalTime: parsedTime,
+                arrivalTime: new Date(unparsedOrder.cas_prevzema),
+                displayTime: "",
                 ownerName: unparsedOrder.id_uporabnik,
                 priceTotal: unparsedOrder.cena,
                 totalPrepTime: 0,
@@ -182,10 +180,13 @@ export default {
                 orderItems: [/*{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}*/]
             };
 
+            // set the time that will be displayed in the DOM
+            parsedOrder.displayTime = this.getDisplayTime(parsedOrder.arrivalTime);
+
             // parse the orderItems
             Object.keys(unparsedOrder.jedi).forEach(indexJedi => {
                 let unparsedItem = unparsedOrder.jedi[indexJedi];
-                parsedOrder.totalPrepTime += unparsedItem.cena // TODO prep time namesto cena
+                parsedOrder.totalPrepTime += unparsedItem.cena; // TODO prep time namesto cena
                 parsedOrder.orderItems.push({
                     id: unparsedItem.id_jed,
                     amount: unparsedItem.kolicina,
@@ -195,31 +196,42 @@ export default {
             });
 
             return parsedOrder;
+        },
+
+        // Extracts the hour and minute from the full date,
+        // so it can be displayed in the DOM
+        getDisplayTime(time) {
+            return "" + time.getHours() + ":" + ('0' + time.getMinutes()).slice(-2);
         }
     },
 
     computed: {
+        sortedOrderIds: function () {
+            let sortedIds = [];
+
+        },
+
         // Builds an array of time slots out of orders
         // Structure: timeSlots{timeSlot1[New][Cooking][Ready], timeSlot2[New][Cooking][Ready], ...}
         timeSlots: function () {
             let timeSlots = {};
             Object.keys(this.orderCards).forEach(orderId => {
                 let orderCard = this.orderCards[orderId];
-                let fullTime = ""; // The time slot in which the card fits
-                let [hour, minute] = orderCard.arrivalTime.split(':');
-                fullTime += hour + ":";
+                let fullTime = orderCard.arrivalTime;// The time slot in which the card fits
+                fullTime.setSeconds(0);
 
+                // Decides in which time slot the card fits
                 // This can be changed depending on how long the time slots need to be
-                if (parseInt(minute, 10) < 30) {
-                    fullTime += '00';
+                if (fullTime.getMinutes() < 30) {
+                    fullTime.setMinutes(0);
                 }
                 else {
-                    fullTime += '30';
+                    fullTime.setMinutes(30);
                 }
 
                 // If the time slot doesn't exist, make a new one
                 if (!(fullTime in timeSlots)) {
-                    timeSlots[fullTime] = [[/*New*/], [/*Cooking*/], [/*Ready*/]];
+                    timeSlots[fullTime] = [[/*New*/], [/*Cooking*/], [/*Ready*/], this.getDisplayTime(fullTime)];
                 }
 
                 // Assign the order card to the correct column based on its status
@@ -268,6 +280,15 @@ export default {
             else {
                 orderCard.orderStatus += 1;
             }
+
+            axios.post(serverUrl + 'orders/status_update/', {
+                id_narocilo: orderCard.orderId,
+                status: orderCard.orderStatus
+            }).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            });
         });
 
         // Determine what happens when the user highlights the tiny card in the TimeLine
