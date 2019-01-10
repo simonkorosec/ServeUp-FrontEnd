@@ -120,6 +120,7 @@ import axios from "axios";
 import TimeLine from "../components/orders/TimeLine";
 import TimeLineItem from "../components/orders/TimeLineItem";
 import VueScrollTo from "vue-scrollto/src/directive";
+import _ from 'lodash';
 
 export default {
     name: "Orders",
@@ -222,9 +223,14 @@ export default {
                 }
 
                 // Assign the order card to the correct column based on its status
-                timeSlots[fullTime][orderCard.orderStatus].push(orderCard);
+                timeSlots[fullTime][orderCard.orderStatus].unshift(orderCard);
             });
-            return timeSlots;
+
+            let orderedSlots = {};
+            _(timeSlots).keys().sort().each(function (key) {
+                orderedSlots[key] = timeSlots[key];
+            });
+            return orderedSlots;
         }
     },
 
@@ -279,14 +285,14 @@ export default {
         });
 
         // TODO Periodically refresh the page with new orders from the server
-        /*setInterval(function () {
+        setInterval(function () {
             let self = this;
             axios.get(serverUrl + 'orders/refresh/?id_restavracija=6')
                 .then(function (response) {
                     console.log('Refresh data', response.data);
                     if (response.data.new_orders.length !== 0){
                         // TODO remove log
-                        console.log('Refresh data', response.data);
+                        console.log('Refresh data rcv', response.data);
                         // Parse each card from the server response data and insert the parsed order
                         // in the view's orderCards dict
                         Object.keys(response.data.new_orders).forEach(objectId => {
@@ -296,6 +302,7 @@ export default {
                         });
                     }
                     if (response.data.cancelled_orders.length !== 0) {
+                        console.log('Refresh data rcv', response.data);
                         response.data.cancelled_orders.forEach(orderId => {
                             self.$delete(this.orderCards, orderId);
                         });
@@ -304,7 +311,7 @@ export default {
                 ).catch(function (error) {
                     console.log('refresh error', error);
                 });
-        }, this.refreshInterval);*/
+        }, this.refreshInterval);
 
     }
 }
