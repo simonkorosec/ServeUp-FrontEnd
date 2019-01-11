@@ -13,7 +13,7 @@
         name: 'QRCode',
         data() {
             return {
-                value: '',
+                value: 'aaaaa',
                 size: 300
             }
         },
