@@ -47,7 +47,7 @@ html,body{
 }
 input[type=text]{
     background-color: #ebebeb;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, .0);
     border-radius: 20px;
     padding: 10px 10px 10px 20px;
     width: 88%;
@@ -55,9 +55,8 @@ input[type=text]{
     color:#444444;
 }
 input[type=text]:focus{
-    outline: 1px solid #00c4ab;
-    outline-offset: -1px;
-    -moz-outline-radius:20px ;
+    border: 1px solid #00c4ab;
+    outline:none;
 }
 button[type=button]{
     background-color: #00c4ab;
@@ -71,6 +70,10 @@ button[type=button]{
 button[type=button]:hover{
     background-color: #00b39b;
 }
+button[type=button]:active{
+    background-color: #009985;
+}
+
 .companyName{
     color:#00c4ab;
     font-size: 27px;

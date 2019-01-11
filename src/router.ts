@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import MainPage from "./components/MainPage.vue";
+import QRCode from "./components/QRCode.vue";
 
 
 Vue.use(Router);
@@ -25,5 +26,10 @@ export default new Router({
             path: "/main_page",
             name: "main_page",
             component: MainPage
+        },
+        {
+            path: "/QRCode",
+            name: "qrcode",
+            component: QRCode
         }]
 });

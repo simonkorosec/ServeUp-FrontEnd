@@ -4,7 +4,24 @@
 
 <script>
     export default {
-        name: "MainPage"
+        name: "MainPage",
+        data () {
+            return { }
+        },
+        beforeCreate: function () {
+            try{
+                if (this.$session.exists()) {
+                    console.log('obstaja');
+                }
+                else{
+                    this.$router.push({ name: "login" });
+                }
+            }
+            catch (e) {
+                this.$router.push({ name: "login" });
+            }
+
+        }
     }
 </script>
 

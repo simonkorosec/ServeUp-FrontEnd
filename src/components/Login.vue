@@ -8,7 +8,7 @@
             <p class="forgot_pass">Forgot password?</p><br>
             <button type="button" v-on:click="login()">Log in</button><br><br>
             <label>Don't have an account?</label><br>
-            <router-link to="/sing_up" class="link">Sing up</router-link>
+            <router-link to="/sing_up" class="link">Sign up</router-link>
             </form>
         </div>
 
@@ -19,8 +19,8 @@
         name: 'Login',
         data() {
             return {
-                email: "",
-                password: "",
+                email: "peter@gmail.com",
+                password: "pan",
                 error:""
             }
         },
@@ -38,17 +38,17 @@
                     }).then(response => {
                         console.log(response.data);
                         console.log("Uporabnik obstaja");
-                        this.$router.replace({ name: "main_page" });
+
+                        this.$router.push({ name: "main_page" });
                     }).catch(error => {
-                        console.log(error.response.data);
+                        console.log(error);
                         this.error=error.response.data.description;
                         console.log("Uporabnik ne obstaja");
                     });
+
                 }
-
-
-
-
+                this.$session.start();
+                this.$session.set('jwt', 'test');
             }
         }
     }

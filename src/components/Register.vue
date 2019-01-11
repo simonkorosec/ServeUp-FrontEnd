@@ -7,9 +7,11 @@
             <input type="text" v-model="password" placeholder="Password"/><br>
             <input type="text" v-model="conf_password" placeholder="Confirm Password"/><br>
             <p id="error">{{error}}</p><br>
-            <button type="button" v-on:click="register()">Sing up</button><br><br>
+            <button type="button" v-on:click="register()">Sign up</button><br><br>
             <label>Already have account?</label><br>
             <router-link to="/" class="link">Log in</router-link>
+            <router-link to="/QRCode" class="link">qr</router-link>
+
         </form>
 
     </div>
@@ -53,6 +55,14 @@
                 }
 
 
+            }
+        },
+        mounted: function () {
+            if (this.$session.exists()) {
+                console.log('obstaja');
+            }
+            else{
+                console.log('ne obstaja');
             }
         }
     }
