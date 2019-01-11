@@ -15,6 +15,8 @@
 </template>
 <script>
     import axios from 'axios';
+    import {serverUrl} from "../Events";
+
     export default {
         name: 'Login',
         data() {
@@ -26,11 +28,11 @@
         },
         methods: {
             login:function(){
-                if(this.email == "" || this.password == ""){
+                if(this.email === "" || this.password === ""){
                     this.error="Uporabnisko ime in geslo ne smeta biti prazna.";
                 }
                 else{
-                    axios.post('https://serveup-backend.herokuapp.com/api/admin_user/login/', {
+                    axios.post(serverUrl + 'admin_user/login/', {
                         email: this.email,
                         password: this.password,
                         format: 'json',
@@ -39,7 +41,7 @@
                         console.log(response.data);
                         console.log("Uporabnik obstaja");
 
-                        this.$router.push({ name: "main_page" });
+                        this.$router.push({ name: "home" });
                     }).catch(error => {
                         console.log(error);
                         this.error=error.response.data.description;

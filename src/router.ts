@@ -5,7 +5,6 @@ import Orders from "./views/Orders.vue"
 import History from "./views/History.vue"
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
-import MainPage from "./components/MainPage.vue";
 import QRCode from "./components/QRCode.vue";
 
 
@@ -25,9 +24,9 @@ export default new Router({
             component: Register
         },
         {
-            path: "/main_page",
-            name: "main_page",
-            component: MainPage
+            path: "/home",
+            name: "home",
+            component: Home
         },
         {
             path: "/QRCode",
