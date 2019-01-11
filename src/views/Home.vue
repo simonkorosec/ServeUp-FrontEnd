@@ -1,10 +1,10 @@
 <template>
     <div id="home">
         <div id="nav">
-            <router-link to="/orders">Orders</router-link>
-            <router-link to="/history">History</router-link>
+            <router-link to="/orders">Trenutna Naročila</router-link>
+            <router-link to="/history">Zgodovina Naročil</router-link>
+            <router-link to="/QRCode">Mize</router-link>
         </div>
-        <router-view/>
     </div>
 </template>
 

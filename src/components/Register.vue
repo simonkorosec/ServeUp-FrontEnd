@@ -33,7 +33,7 @@
         },
         methods:{
             register: function () {
-                if(this.full_name =="" || this.email =="" || this.password =="" || this.conf_password ==""){
+                if(this.full_name ==="" || this.email ==="" || this.password ==="" || this.conf_password ===""){
                     this.error="Vsi podatki morajo biti vnešeni";
                 }
                 else{
@@ -73,7 +73,7 @@
         font-size: 12px;
         text-align: left;
         margin-left: 6px;
-        margin-bottom: 0px;
-        margin-top: 0px;
+        margin-bottom: 0;
+        margin-top: 0;
     }
 </style>

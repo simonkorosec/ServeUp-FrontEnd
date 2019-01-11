@@ -6,6 +6,7 @@ import History from "./views/History.vue"
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import QRCode from "./components/QRCode.vue";
+import MainPage from "./views/MainPage.vue"
 
 
 Vue.use(Router);
@@ -22,6 +23,11 @@ export default new Router({
             path: "/sing_up",
             name: "register",
             component: Register
+        },
+        {
+            path: "/main",
+            name: "main",
+            component: MainPage
         },
         {
             path: "/home",

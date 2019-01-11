@@ -1,14 +1,16 @@
 <template>
-    <p>MAIN PAGE</p>
+    <home></home>
 </template>
 
 <script>
+    import Home from "./Home";
     export default {
         name: "MainPage",
+        components: {Home},
         data () {
             return { }
         },
-        beforeCreate: function () {
+        /*beforeCreate: function () {
             try{
                 if (this.$session.exists()) {
                     console.log('obstaja');
@@ -21,7 +23,7 @@
                 this.$router.push({ name: "login" });
             }
 
-        }
+        }*/
     }
 </script>
 
