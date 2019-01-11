@@ -6,8 +6,6 @@ import History from "./views/History.vue"
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import QRCode from "./components/QRCode.vue";
-import MainPage from "./views/MainPage.vue"
-
 
 Vue.use(Router);
 
@@ -25,29 +23,27 @@ export default new Router({
             component: Register
         },
         {
-            path: "/main",
-            name: "main",
-            component: MainPage
-        },
-        {
             path: "/home",
             name: "home",
-            component: Home
+            component: Home,
+            children: [
+                {
+                    path: 'orders',
+                    name: "orders",
+                    component: Orders
+                },
+                {
+                    path: "history",
+                    name: "history",
+                    component: History
+                },
+                {
+                    path: "QRCode",
+                    name: "qrcode",
+                    component: QRCode
+                },
+            ]
         },
-        {
-            path: "/QRCode",
-            name: "qrcode",
-            component: QRCode
-        },
-        {
-            path: "/orders",
-            name: "orders",
-            component: Orders
-        },
-        {
-            path: "/history",
-            name: "history",
-            component: History
-        },
+
     ]
 });

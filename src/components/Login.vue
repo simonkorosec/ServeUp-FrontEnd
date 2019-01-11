@@ -41,7 +41,7 @@
                         console.log(response.data);
                         console.log("Uporabnik obstaja");
 
-                        this.$router.push({ name: "main" });
+                        this.$router.push({ path: "/home/orders" });
                     }).catch(error => {
                         console.log(error);
                         this.error=error.response.data.description;
