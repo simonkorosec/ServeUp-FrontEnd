@@ -25,7 +25,7 @@
     }
 
     #app {
-        background: url(assets/restaurant_cafe_design_style_tables_chairs_39235_1920x1080.png) no-repeat center center fixed;
+        background: url(assets/background.png) no-repeat center center fixed;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
@@ -35,7 +35,6 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
 
-        color: #2c3e50;
         width: 100vw;
         height: 100vh;
         flex-direction: row;
