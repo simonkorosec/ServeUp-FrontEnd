@@ -178,6 +178,8 @@
             display: flex;
             width: 100%;
             height: 100%;
+            z-index: 10;
+            box-shadow: $su-shadow;
         }
 
         .su-history-line-box {
