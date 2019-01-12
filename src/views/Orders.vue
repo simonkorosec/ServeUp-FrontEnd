@@ -154,6 +154,8 @@ export default {
             refreshInterval: 5000, // milliseconds
             // scrollOptions defines the way the scrolling behaves when clicking on
             // a card on the TimeLine
+            refreshTimer: null,
+
             scrollOptions: {
                 container: '#su-time-section-box', // element to scroll
                 easing: 'ease-in',
@@ -217,11 +219,16 @@ export default {
         },
 
         parseOrder(unparsedOrder) {
+            let cas_prevzema = unparsedOrder.cas_prevzema;
+            if (cas_prevzema.slice(-1) !== "Z") {
+                cas_prevzema = cas_prevzema + "Z"
+            }
+            
             let parsedOrder = {
                 orderId: unparsedOrder.id_narocila,
                 orderStatus: unparsedOrder.status,
                 isHere: unparsedOrder.checked_in,
-                arrivalTime: new Date(unparsedOrder.cas_prevzema),
+                arrivalTime: new Date(cas_prevzema),
                 displayTime: "",
                 ownerName: unparsedOrder.id_uporabnik,
                 priceTotal: unparsedOrder.cena,
@@ -249,6 +256,44 @@ export default {
             });
 
             return parsedOrder;
+        },
+
+        updateOrders () {
+            let self = this;
+            let orderirir = this.orderCards;
+            axios.get(serverUrl + 'orders/refresh/?id_restavracija=6')
+                .then(function (response) {
+                        //self = this;
+                        console.log('Refresh data', response.data);
+                        if (response.data.new_orders.length !== 0){
+                            // TODO remove log
+                            //console.log(self.orderCards);
+                            console.log('Refresh data rcv', response.data);
+                            // Parse each card from the server response data and insert the parsed order
+                            // in the view's orderCards dict
+                            Object.keys(response.data.new_orders).forEach(objectId => {
+                                let parsedOrder = self.parseOrder(response.data.new_orders[objectId]);
+                                self.orderCards.push(parsedOrder);
+                            });
+
+                            self.orderCards.sort(function (card1, card2) {
+                                return card1.arrivalTime - card2.arrivalTime;
+                            });
+                        }
+                        if (response.data.cancelled_orders.length !== 0) {
+                            console.log('Cancelled', response.data);
+                            for (let i = self.orderCards.length - 1; i >= 0; i--) {
+                                if (response.data.cancelled_orders.includes(self.orderCards[i].orderId)) {
+                                    self.orderCards.splice(i, 1);
+                                }
+                            }
+                        }
+
+                        // TODO checked in users
+                    }
+                ).catch(function (error) {
+                console.log('refresh error', error);
+            });
         },
 
         // Extracts the hour and minute from the full date,
@@ -338,37 +383,10 @@ export default {
         });
 
         // TODO Periodically refresh the page with new orders from the server
-        setInterval(function () {
-            let self = this;
-            axios.get(serverUrl + 'orders/refresh/?id_restavracija=6')
-                .then(function (response) {
-                    console.log('Refresh data', response.data);
-                    if (response.data.new_orders.length !== 0){
-                        // TODO remove log
-                        console.log('Refresh data rcv', response.data);
-                        // Parse each card from the server response data and insert the parsed order
-                        // in the view's orderCards dict
-                        Object.keys(response.data.new_orders).forEach(objectId => {
-                            let parsedOrder = self.parseOrder(response.data.data[objectId]);
-                            self.orderCards.push(parsedOrder);
-                        });
-
-                        self.orderCards.sort(function (card1, card2) {
-                            return card1.arrivalTime - card2.arrivalTime;
-                        });
-                    }
-                    if (response.data.cancelled_orders.length !== 0) {
-                        console.log('Refresh data rcv', response.data);
-                        response.data.cancelled_orders.forEach(orderId => {
-                            self.$delete(this.orderCards, orderId);
-                        });
-                    }
-                }
-                ).catch(function (error) {
-                    console.log('refresh error', error);
-                });
-        }, this.refreshInterval);
-
+        let self = this;
+        this.refreshTimer = setInterval(function () {
+            self.updateOrders();
+        }, self.refreshInterval);
     }
 }
 </script>
