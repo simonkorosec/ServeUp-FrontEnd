@@ -49,7 +49,6 @@
             </time-line>
             <div class="su-time-section-footer" v-if="!isEmpty(orderCards)"></div>
         </div>
-
         <div id="su-time-section-box">
             <!--For each timeSlot generate a new time section-->
             <time-section v-for="(timeSlot, time) in timeSlots" :key="time">
@@ -238,12 +237,14 @@ export default {
             // parse the orderItems
             Object.keys(unparsedOrder.jedi).forEach(indexJedi => {
                 let unparsedItem = unparsedOrder.jedi[indexJedi];
-                parsedOrder.totalPrepTime += unparsedItem.cena; // TODO prep time namesto cena
+                let tempPrep = Math.floor((Math.random() * (20 - 5) + 5));
+                parsedOrder.totalPrepTime += tempPrep; // TODO prep time namesto cena
                 parsedOrder.orderItems.push({
                     id: unparsedItem.id_jed,
                     amount: unparsedItem.kolicina,
                     name: unparsedItem.ime_jedi,
-                    prepTime: unparsedItem.cena // TODO prep time namesto cena
+                    prepTime: tempPrep,
+                    price: unparsedItem.cena
                 });
             });
 
@@ -282,22 +283,33 @@ export default {
     mounted() {
         // the this of the vue object is not accessible inside other functions
         // in order to be acceded it must be stored in a variable
-        self = this;
+        let orderCards = this.orderCards;
+        let scrollOptions = this.scrollOptions;
+
+        // Unbind all events from event bus, so they don't trigger multiple times
+        EventBus.$off();
 
         // When a status of the card is changed intercept the event
         // and move the card in the next status group (New => Cooking => Ready => Done)
         EventBus.$on('changeStatus', orderId => {
-            let clickedOrderCard = self.orderCards.filter(orderCard => {
-                return orderCard.orderId === orderId;
-            })[0];
+            let clickedOrderCard = null;
+            let orderIndex = -1;
+
+            orderCards.forEach(function (orderCard, i) {
+                if (orderCard.orderId === orderId) {
+                    clickedOrderCard = orderCard;
+                    orderIndex = i;
+                }
+            });
+
             // If the current status is Ready, remove the card from the list
             if (clickedOrderCard.orderStatus === 2) {
-                this.$delete(self.orderCards, orderId);
+                orderCards.splice(orderIndex, 1);
+                //this.$delete(self.orderCards, orderId);
+                //self.orderCards
             }
-            // Else move it in the next status group
-            else {
-                clickedOrderCard.orderStatus += 1;
-            }
+            // Move it in the next status group
+            clickedOrderCard.orderStatus += 1;
 
             // Update the server
             axios.post(serverUrl + 'orders/status_update/', {
@@ -311,13 +323,13 @@ export default {
         });
 
         // Determine what happens when the user highlights the tiny card in the TimeLine
-        EventBus.$on('highlight', async function(orderId) {
-            let clickedOrderCard = self.orderCards.filter(orderCard => {
+        EventBus.$on('highlight', function(orderId) {
+            let clickedOrderCard = orderCards.filter(orderCard => {
                 return orderCard.orderId === orderId;
             })[0];
             clickedOrderCard.isHighlighted = true;
             let scrollId = '#su-card-' + orderId; // the ID of the object we scroll to
-            VueScrollTo.scrollTo(scrollId, 200, self.scrollOptions);
+            VueScrollTo.scrollTo(scrollId, 200, scrollOptions);
             // The user has to wait 1 second, before they can highlight the item again
             setTimeout(function () {
                 clickedOrderCard.isHighlighted = false;
@@ -326,7 +338,7 @@ export default {
         });
 
         // TODO Periodically refresh the page with new orders from the server
-        /*setInterval(function () {
+        setInterval(function () {
             let self = this;
             axios.get(serverUrl + 'orders/refresh/?id_restavracija=6')
                 .then(function (response) {
@@ -337,9 +349,12 @@ export default {
                         // Parse each card from the server response data and insert the parsed order
                         // in the view's orderCards dict
                         Object.keys(response.data.new_orders).forEach(objectId => {
-                            let parsedOrder = self.parseOrder(response.data.new_orders[objectId]);
-                            // Gotta use $set to make vue recognize the inserted object and make it reactive
-                            self.$set(self.orderCards, parsedOrder.orderId, parsedOrder);
+                            let parsedOrder = self.parseOrder(response.data.data[objectId]);
+                            self.orderCards.push(parsedOrder);
+                        });
+
+                        self.orderCards.sort(function (card1, card2) {
+                            return card1.arrivalTime - card2.arrivalTime;
                         });
                     }
                     if (response.data.cancelled_orders.length !== 0) {
@@ -352,7 +367,7 @@ export default {
                 ).catch(function (error) {
                     console.log('refresh error', error);
                 });
-        }, this.refreshInterval);*/
+        }, this.refreshInterval);
 
     }
 }
@@ -362,6 +377,7 @@ export default {
     @import "../styles/variables";
 
     #su-orders {
+        background: $su-color-primary-pale;
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -371,30 +387,25 @@ export default {
         .su-top-bar {
             background: $su-color-content-light;
             align-items: stretch;
-            display: flex;
+            display: inline-flex;
+            flex-shrink: 0;
             margin-bottom: 8px;
             box-shadow: $su-shadow;
 
             div {
                 flex-grow: 3;
-                min-height: 9rem;
-                height: 9rem;
                 display: flex;
                 justify-content: center;
 
                 img {
-                    margin: 0.9rem;
-                    margin-left: -3rem;
-                    width: 1.5rem;
-                    height: 1.5rem;
-                    position: relative;
+                    margin: auto 0.5rem auto -4rem;
+                    width: 1.2rem;
+                    height: 1.2rem;
                 }
 
                 p {
                     font-weight: bold;
                     color: $su-color-dark-gray;
-
-
                 }
             }
 

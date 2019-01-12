@@ -1,16 +1,16 @@
 <template>
     <div class="su-order-card-body" :class="highlighted=isHighlighted">
         <div class="su-order-card-header">
-            <p class="su-order-card-time"><slot name="arrivalTime"></slot></p>
-            <p class="su-order-card-owner"><slot name="ownerName"></slot></p>
-            <p class="su-order-card-total"><slot name="priceTotal"></slot>$</p>
+            <p class="su-order-card-owner">ID: <slot name="ownerName"></slot></p>
+            <p class="su-order-card-time">ob <slot name="arrivalTime"></slot></p>
+            <p class="su-order-card-total"><slot name="priceTotal"></slot>€</p>
         </div>
         <div class="su-order-card-items">
             <slot name="orderItems"></slot>
         </div>
         <div class="su-order-card-footer">
             <button @click="changeStatusCard()">NASLEDNJI KORAK</button>
-            <p><slot name="totalPrepTime"></slot></p>
+            <p><slot name="totalPrepTime"></slot>m</p>
         </div>
     </div>
 </template>

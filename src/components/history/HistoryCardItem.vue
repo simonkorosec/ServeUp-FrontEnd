@@ -2,7 +2,7 @@
     <div class="su-history-item-body">
         <p><slot name="amount"></slot>x</p>
         <p><slot name="foodName"></slot></p>
-        <p><slot name="price"></slot>$</p>
+        <p><slot name="price"></slot>€</p>
     </div>
 </template>
 

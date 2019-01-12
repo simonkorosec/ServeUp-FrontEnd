@@ -5,29 +5,31 @@
         </div>
         <div class="su-history-container">
             <div class="su-history-line-box">
-                <history-line v-for="slot in historyTimeSections">
+                <history-line v-for="timeSlot in timeSlots" :key="timeSlot[1]">
                     <template slot="timeLabel">10:30</template>
                     <template slot="lineItems">
-                        <history-line-item v-for="card in orderCards"></history-line-item>
+                        <history-line-item v-for="card in timeSlot[0]" :key="card.orderId" :order-id="card.orderId">
+
+                        </history-line-item>
                     </template>
                 </history-line>
             </div>
 
             <history-tab>
                 <template slot="historyTimeSections">
-                    <history-section v-for="timeSection in historyTimeSections">
-                        <template slot="timeLabel">10:30</template>
+                    <history-section v-for="timeSlot in timeSlots" :key="timeSlot[1]">
+                        <template slot="timeLabel">{{timeSlot[1]}}</template>
                         <template slot="historyCards">
-                            <history-card v-for="card in orderCards">
-                                <template slot="arrivalTime">10:30</template>
-                                <template slot="ownerName">Jon Doe</template>
-                                <template slot="priceTotal">30.5</template>
+                            <history-card v-for="card in timeSlot[0]" :key="card.orderId">
+                                <template slot="arrivalTime">{{card.displayTime}}</template>
+                                <template slot="ownerName">{{card.ownerName}}</template>
+                                <template slot="priceTotal">{{card.priceTotal}}</template>
 
                                 <template slot="historyItems">
-                                    <history-card-item v-for="item in historyItems">
-                                        <template slot="amount">3</template>
-                                        <template slot="foodName">Food Items</template>
-                                        <template slot="price">30.4</template>
+                                    <history-card-item v-for="item in card.orderItems" :key="item.id">
+                                        <template slot="amount">{{item.amount}}</template>
+                                        <template slot="foodName">{{item.name}}</template>
+                                        <template slot="price">{{item.price}}</template>
                                     </history-card-item>
                                 </template>
                             </history-card>
@@ -56,9 +58,9 @@
 
         data() {
             return {
-                orderCards: [1, 1, 1, 1, 1, 1, 1,],
-                historyTimeSections: [1, 1, 1, 1, 1],
-                historyItems: [1, 1, 1, 1, 1],
+                orderCards: [],
+                //historyTimeSections: [1, 1, 1, 1, 1],
+                //historyItems: [1, 1, 1, 1, 1],
             }
         },
 
@@ -116,11 +118,16 @@
                         id: unparsedItem.id_jed,
                         amount: unparsedItem.kolicina,
                         name: unparsedItem.ime_jedi,
-                        prepTime: unparsedItem.cena // TODO prep time namesto cena
+                        prepTime: unparsedItem.cena,
+                        price: unparsedItem.cena// TODO prep time namesto cena
                     });
                 });
 
                 return parsedOrder;
+            },
+
+            getDisplayTime(time) {
+                return "" + time.getHours() + ":" + ('0' + time.getMinutes()).slice(-2);
             },
         },
 
@@ -128,22 +135,21 @@
             let self = this;
             axios.get(serverUrl + 'orders/?id_restavracija=6')
                 .then(function (response) {
-                        // TODO remove log
-                        console.log('Response data', response.data.data);
-                        // Parse each card from the server response data and insert the parsed order
-                        // in the view's orderCards dict
-                        Object.keys(response.data.data).forEach(objectId => {
-                            if (response.data.data[objectId].status === 3) {
-                                let parsedOrder = self.parseOrder(response.data.data[objectId]);
-                                self.orderCards.push(parsedOrder);
-                            }
-                        });
+                    // TODO remove log
+                    console.log('Response data', response.data.data);
+                    // Parse each card from the server response data and insert the parsed order
+                    // in the view's orderCards dict
+                    Object.keys(response.data.data).forEach(objectId => {
+                        if (response.data.data[objectId].status === 3) {
+                            let parsedOrder = self.parseOrder(response.data.data[objectId]);
+                            self.orderCards.push(parsedOrder);
+                        }
+                    });
 
-                        self.orderCards.sort(function (card1, card2) {
-                            return card1.arrivalTime - card2.arrivalTime;
-                        });
-                    }
-                );
+                    self.orderCards.sort(function (card1, card2) {
+                        return card1.arrivalTime - card2.arrivalTime;
+                    });
+                });
         },
     }
 </script>

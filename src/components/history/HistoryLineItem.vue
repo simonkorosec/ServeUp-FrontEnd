@@ -34,13 +34,10 @@
         padding: 8px;
 
         .su-history-line-item {
-            background: $su-color-content-light;
+            background: $su-color-background;
             width: 100%;
             height: 100%;
-            /*display: flex;
-            height: 2.5rem;
             border-radius: 0.2rem;
-            margin: 16px 8px;*/
 
             &:hover {
                 @include su-mx-shadow-hover($su-shadow, $su-shadow-hover);
