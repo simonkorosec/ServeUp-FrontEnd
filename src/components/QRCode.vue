@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <input class="qrtext" v-model="value" type="text" placeholder="Vnesite ime mize"/><button id="insert"  type="button" v-on:click="name()">Generiraj QR kodo</button><br>
+        <input class="qrtext" v-model="value" type="text" placeholder="Vnesi ime mize"/><button id="insert"  type="button" v-on:click="name()">Generiraj QR kodo</button><br>
             <div class="test">
                 <Qr id="test1" v-for="item in items" :value="item" > </Qr>
             </div>
