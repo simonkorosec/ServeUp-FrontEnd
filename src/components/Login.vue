@@ -3,7 +3,7 @@
         <form>
             <label class="companyName">ServeUp</label><br><br><br><br>
             <input type="text" name="email" v-model="email" placeholder="Email"/><br>
-            <input type="text" name="password" v-model="password" placeholder="Password"/><br>
+            <input type="password" name="password" v-model="password" placeholder="Password"/><br>
             <p id="error">{{error}}</p>
             <p class="forgot_pass">Forgot password?</p><br>
             <button type="button" v-on:click="login()">Log in</button><br><br>
@@ -40,8 +40,9 @@
                     }).then(response => {
                         console.log(response.data);
                         console.log("Uporabnik obstaja");
-
                         this.$router.push({ path: "/home/orders" });
+                        this.$session.start();
+                        this.$session.set('jwt', 'test');
                     }).catch(error => {
                         console.log(error);
                         this.error=error.response.data.description;
@@ -49,8 +50,7 @@
                     });
 
                 }
-                this.$session.start();
-                this.$session.set('jwt', 'test');
+
             }
         }
     }

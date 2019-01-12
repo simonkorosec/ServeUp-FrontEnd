@@ -18,8 +18,7 @@ export default {
 
         }
     },
-
-    /*beforeCreate: function () {
+    beforeCreate: function () {
             try{
                 if (this.$session.exists()) {
                     console.log('obstaja');
@@ -32,7 +31,7 @@ export default {
                 this.$router.push({ name: "login" });
             }
 
-        }*/
+        }
 }
 </script>
 

@@ -61,7 +61,7 @@
 
 
     }
-    input[type=text]{
+    input[type=text],[type=password]{
         background-color: #ebebeb;
         border: 1px solid rgba(0, 0, 0, .0);
         border-radius: 20px;
