@@ -55,7 +55,7 @@
             p {
                 margin: 8px;
                 font-weight: bold;
-                color: $su-color-dark-gray;
+                color: $su-color-primary-dark;
             }
         }
 

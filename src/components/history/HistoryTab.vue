@@ -12,7 +12,7 @@
 
 <style lang="scss" scoped>
     .su-history-tab {
-        //flex: 8 1 auto;
+        width: 100%;
         height: 100%;
         overflow-y: auto;
         overflow-x: hidden;
