@@ -12,8 +12,8 @@ self.__precacheManifest = [
     "url": "../dist/img/background.65b3f227.png"
   },
   {
-    "revision": "83cb0da8a9db6f170a72",
-    "url": "../dist/js/chunk-vendors.02b38125.js"
+    "revision": "1e63a70f7f83922a6879",
+    "url": "../dist/js/chunk-vendors.49a35435.js"
   },
   {
     "revision": "d0fb831dbc73e78d52318395ecd5f039",
@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "../dist/img/tables.bd7d9540.svg"
   },
   {
-    "revision": "b590c6f92733c90199400aec12e4a498",
+    "revision": "cd02fc79a23582aac2f02e076f6737ac",
     "url": "../dist/index.html"
   },
   {
-    "revision": "0909fe4ab48219f9b29c",
-    "url": "../dist/js/app.b5230dfe.js"
+    "revision": "305fc1de5e8f6dc4fc70",
+    "url": "../dist/js/app.549eb16f.js"
   },
   {
     "revision": "84bf0914fcfcccac6655e4a84448496b",
@@ -64,7 +64,7 @@ self.__precacheManifest = [
     "url": "../dist/img/discounts.77975753.svg"
   },
   {
-    "revision": "0909fe4ab48219f9b29c",
-    "url": "../dist/css/app.93895304.css"
+    "revision": "305fc1de5e8f6dc4fc70",
+    "url": "../dist/css/app.dd773056.css"
   }
 ];

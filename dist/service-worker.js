@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "../dist/precache-manifest.580b7be2fc27a1d6e0dc0662eed482cb.js"
+  "../dist/precache-manifest.520bd67d0f3e73342a5d0d51fd06eafe.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "serveup"});
