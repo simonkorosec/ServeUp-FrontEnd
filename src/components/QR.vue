@@ -3,7 +3,7 @@
         <label id="printMe"><b>{{value}}</b></label><br>
         <qrcode-vue  :value="value" :size="size" level="H"></qrcode-vue>
 
-        <button type="button" v-print>Natisni QR kodoo</button>
+        <button type="button" v-print>Natisni QR kodo</button>
     </div>
 
 </template>
