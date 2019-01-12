@@ -38,7 +38,7 @@ export default new Router({
                     component: History
                 },
                 {
-                    path: "QRCode",
+                    path: "QRcode",
                     name: "qrcode",
                     component: QRCode
                 },

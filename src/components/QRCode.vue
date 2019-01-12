@@ -2,14 +2,14 @@
     <div class="container">
         <input class="qrtext" v-model="value" type="text" placeholder="Vnesi ime mize"/><button id="insert"  type="button" v-on:click="name()">Generiraj QR kodo</button><br>
             <div class="test">
-                <Qr id="test1" v-for="item in items" :value="item" > </Qr>
+                <QR id="test1" v-for="item in items" :value="item" > </QR>
             </div>
     </div>
 </template>
 
 <script>
     import QrcodeVue from 'qrcode.vue';
-    import Qr from "./Qr";
+    import QR from "./QR";
     export default {
         name: 'QRCode',
         data() {
@@ -20,7 +20,7 @@
 
         },
         components: {
-            Qr,
+            QR,
             QrcodeVue
         },
         beforeCreate: function () {
@@ -63,7 +63,10 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../styles/variables";
+
 .container{
+    background: $su-color-background;
     text-align: left;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -71,11 +74,13 @@
 }
 .qrtext{
     width:300px;
+    color: $su-color-dark-gray;
     position: -webkit-sticky;
     position: sticky;
+    background: $su-color-content-light;
     top: 20px;
     left: 20px;
-    border: 1px solid #00c4ab;
+    border: 2px solid $su-color-light-gray;
     outline:none;
 
 }

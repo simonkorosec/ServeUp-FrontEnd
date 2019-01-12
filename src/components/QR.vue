@@ -11,7 +11,7 @@
 <script>
     import QrcodeVue from 'qrcode.vue';
     export default {
-        name: "Qr",
+        name: "QR",
         props: {
             value:String
         },
@@ -38,19 +38,29 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import "../styles/variables";
 .qrticket{
-
-    background-color:#ebebeb;
-    border: 1px solid #00c4ab;
+    background: $su-color-content-light;
+    //border: 1px solid #00c4ab;
+    box-shadow: $su-shadow;
     padding: 10px 25px;
     margin: 10px;
     display: inline-block;
     text-align: left;
+    border-radius: 8px;
 }
 
 b{
-    margin-bottom: 13px;
-    bottom: 13px;
+    width: 100%;
+    text-align: center;
+    display: block;
+    font-size: 1.5rem;
+    margin-top: 8px;
 }
+
+    button {
+        margin-top: 16px;
+        display: block;
+    }
 </style>

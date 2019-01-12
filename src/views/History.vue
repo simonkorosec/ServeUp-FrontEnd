@@ -1,7 +1,9 @@
 <template>
     <div id="su-history">
         <div class="su-history-date">
-            <p>DATE</p>
+            <button v-on:click="prevTab"> < </button>
+            <p>{{getDisplayDate(currentDate)}}</p>
+            <button v-on:click="nextTab()"> > </button>
         </div>
         <div class="su-history-container">
             <div class="su-history-line-box">
@@ -15,9 +17,9 @@
                 </history-line>
             </div>
 
-            <history-tab>
+            <history-tab v-for="(tab, key) in historyTabs" v-if="key === String(currentDate)">
                 <template slot="historyTimeSections">
-                    <history-section v-for="timeSlot in timeSlots" :key="timeSlot[1]">
+                    <history-section v-for="timeSlot in tab[0]">
                         <template slot="timeLabel">{{timeSlot[1]}}</template>
                         <template slot="historyCards">
                             <history-card v-for="card in timeSlot[0]" :key="card.orderId">
@@ -59,15 +61,18 @@
         data() {
             return {
                 orderCards: [],
-                //historyTimeSections: [1, 1, 1, 1, 1],
-                //historyItems: [1, 1, 1, 1, 1],
+                dates: [],
+                currentDate: null
             }
         },
 
         computed: {
-            timeSlots: function () {
-                let timeSlots = {};
-                this.orderCards.forEach(orderCard => {
+            historyTabs: function () {
+                let historyTabs = {};
+                let date = new Date();
+                let self = this;
+                let len = this.orderCards.length;
+                this.orderCards.forEach(function (orderCard, i) {
                     let fullTime = orderCard.arrivalTime;// The time slot in which the card fits
                     fullTime.setSeconds(0);
 
@@ -79,15 +84,57 @@
                     else {
                         fullTime.setMinutes(30);
                     }
+                    //let month = fullTime.getMonth()+1;
+
+                    //let date = "" + fullTime.getDate() + month + fullTime.getFullYear();
+                    date = new Date(fullTime);
+                    date.setHours(0);
+                    date.setMinutes(0);
 
                     // If the time slot doesn't exist, make a new one
-                    if (!(fullTime in timeSlots)) {
-                        timeSlots[fullTime] = [[], this.getDisplayTime(fullTime)];
+                    if (!(date in historyTabs)) {
+                        if (i === 0) {
+                            historyTabs[date] = [[], true];//{timeSlots: [], isActive: true};
+                            self.dates.push(date);
+                            self.currentDate = date;
+                        }
+                        else {
+                            historyTabs[date] = [[], false];//{timeSlots: [], isActive: true};
+                            self.dates.push(date)
+                        }
                     }
 
-                    timeSlots[fullTime][0].unshift(orderCard);
+                    historyTabs[date][0].unshift(orderCard);
+                    //console.log(historyTabs);
                 });
-                return timeSlots;
+
+                Object.keys(historyTabs).forEach(key => {
+                    let timeSlots = {};
+                    historyTabs[key][0].forEach(orderCard => {
+                        let fullTime = orderCard.arrivalTime;// The time slot in which the card fits
+                        fullTime.setSeconds(0);
+
+                        // Decides in which time slot the card fits
+                        // This can be changed depending on how long the time slots need to be
+                        if (fullTime.getMinutes() < 30) {
+                            fullTime.setMinutes(0);
+                        }
+                        else {
+                            fullTime.setMinutes(30);
+                        }
+
+                        // If the time slot doesn't exist, make a new one
+                        if (!(fullTime in timeSlots)) {
+                            timeSlots[fullTime] = [[/*New*/], this.getDisplayTime(fullTime)];
+                        }
+
+                        // Assign the order card to the correct column based on its status
+                        timeSlots[fullTime][0].unshift(orderCard);
+                    });
+                    historyTabs[key][0] = timeSlots;
+                });
+                //console.log(self.dates[self.dates.length-1].$set('visible', true));
+                return historyTabs;
             }
         },
 
@@ -124,6 +171,31 @@
                 });
 
                 return parsedOrder;
+            },
+
+            nextTab() {
+                for (let i = 0; i < this.dates.length; i++) {
+                    if (this.dates[i] === this.currentDate && i < this.dates.length-1) {
+                        this.currentDate = this.dates[i+1];
+                        break;
+                    }
+                }
+            },
+
+            prevTab() {
+                for (let i = 0; i < this.dates.length; i++) {
+                    if (this.dates[i] === this.currentDate && i > 0) {
+                        this.currentDate = this.dates[i-1];
+                        break;
+                    }
+                }
+            },
+
+            getDisplayDate(time) {
+                if (time === null) {
+                    return 'TIME'
+                }
+                return "" + time.getDate() + "." + ('0' + time.getMonth()).slice(-2) + '.' + time.getFullYear();
             },
 
             getDisplayTime(time) {
