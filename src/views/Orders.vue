@@ -1,7 +1,22 @@
 <template>
 <div id="su-orders">
     <div class="su-top-bar">
-        <p>TOP BAR</p>
+        <div class="pregled">
+            <img src="../assets/icons/overview.svg">
+            <p>Pregled</p>
+        </div>
+        <div>
+            <img src="../assets/icons/new.svg">
+            <p>Nova naročila</p>
+        </div>
+        <div>
+            <img src="../assets/icons/making.svg">
+            <p>V pripravi</p>
+        </div>
+        <div>
+            <img src="../assets/icons/ready.svg">
+            <p>Pripravljeno</p>
+        </div>
     </div>
     <div id="su-orders-container">
         <div id="su-time-line-box">
@@ -355,8 +370,41 @@ export default {
 
         .su-top-bar {
             background: $su-color-content-light;
+            align-items: stretch;
+            display: flex;
             margin-bottom: 8px;
             box-shadow: $su-shadow;
+
+            div {
+                flex-grow: 3;
+                min-height: 9rem;
+                height: 9rem;
+                display: flex;
+                justify-content: center;
+
+                img {
+                    margin: 0.9rem;
+                    margin-left: -3rem;
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    position: relative;
+                }
+
+                p {
+                    font-weight: bold;
+                    color: $su-color-dark-gray;
+
+
+                }
+            }
+
+            .pregled {
+                flex-grow: 1;
+
+                img {
+                    margin-left: -1rem;
+                }
+            }
         }
 
         #su-orders-container {

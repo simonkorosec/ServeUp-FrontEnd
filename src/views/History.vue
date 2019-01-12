@@ -159,15 +159,10 @@
         background: $su-color-background;
 
         .su-history-date {
-            //position: sticky;
             background: $su-color-content-light;
+            margin-bottom: 8px;
             box-shadow: $su-shadow;
-            z-index: 11;
-            margin-bottom: 16px;
-            width: 100%;
-            height: 5%;
-            top: 0;
-            left: 0;
+
             p {
                 font-weight: bold;
                 color: $su-color-dark-gray;
