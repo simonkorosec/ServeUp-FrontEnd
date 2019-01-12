@@ -1,112 +1,131 @@
 <template>
 <div id="su-orders">
-    <div id="su-time-line-box">
-        <time-line v-for="(timeSlot, time) in timeSlots" :key="time">
-            <template slot="timeLabel">{{timeSlot[3]}}</template>
-
-            <template slot="sectionNew" class="su-time-line-item-new">
-                <time-line-item v-for="card in timeSlot[0]" :key="card.orderId"
-                                :order-id="card.orderId"
-                                :class="{suHere: card.isHere}"
-                                class="su-time-line-item-new">
-                </time-line-item>
-            </template>
-
-            <template slot="sectionMaking" class="su-time-line-item-making">
-                <time-line-item v-for="card in timeSlot[1]" :key="card.orderId"
-                                :order-id="card.orderId"
-                                :class="{suHere: card.isHere}"
-                                class="su-time-line-item-making">
-                </time-line-item>
-            </template>
-
-            <template slot="sectionReady" class="su-time-line-item-new">
-                <time-line-item v-for="card in timeSlot[2]" :key="card.orderId"
-                                :order-id="card.orderId"
-                                :class="{suHere: card.isHere}"
-                                class="su-time-line-item-ready">
-                </time-line-item>
-            </template>
-        </time-line>
-        <div class="su-time-section-footer" v-if="!isEmpty(orderCards)"></div>
+    <div class="su-top-bar">
+        <div class="pregled">
+            <img src="../assets/icons/overview.svg">
+            <p>Pregled</p>
+        </div>
+        <div>
+            <img src="../assets/icons/new.svg">
+            <p>Nova naročila</p>
+        </div>
+        <div>
+            <img src="../assets/icons/making.svg">
+            <p>V pripravi</p>
+        </div>
+        <div>
+            <img src="../assets/icons/ready.svg">
+            <p>Pripravljeno</p>
+        </div>
     </div>
+    <div id="su-orders-container">
+        <div id="su-time-line-box">
+            <time-line v-for="(timeSlot, time) in timeSlots" :key="time">
+                <template slot="timeLabel">{{timeSlot[3]}}</template>
 
-    <div id="su-time-section-box">
-        <!--For each timeSlot generate a new time section-->
-        <time-section v-for="(timeSlot, time) in timeSlots" :key="time">
-            <!--timeSlot[3] is the display time-->
-            <template slot="timeLabel">{{timeSlot[3]}}</template>
+                <template slot="sectionNew" class="su-time-line-item-new">
+                    <time-line-item v-for="card in timeSlot[0]" :key="card.orderId"
+                                    :order-id="card.orderId"
+                                    :class="{suHere: card.isHere}"
+                                    class="su-time-line-item-new">
+                    </time-line-item>
+                </template>
 
-            <template slot="sectionNew">
-                <!--For each orderCard in that time section generate a new order card-->
-                <order-card v-for="card in timeSlot[0]" :key="card.orderId"
-                            :order-id="card.orderId"
-                            :class="{suHereNew: card.isHere, highlighted: card.isHighlighted}"
-                            :id="'su-card-' + card.orderId">
-                    <template slot="arrivalTime">{{card.displayTime}}</template>
-                    <template slot="ownerName">{{card.ownerName}}</template>
-                    <template slot="priceTotal">{{card.priceTotal}}</template>
+                <template slot="sectionMaking" class="su-time-line-item-making">
+                    <time-line-item v-for="card in timeSlot[1]" :key="card.orderId"
+                                    :order-id="card.orderId"
+                                    :class="{suHere: card.isHere}"
+                                    class="su-time-line-item-making">
+                    </time-line-item>
+                </template>
 
-                    <!--For each order item in the orderCard generate a new order card item-->
-                    <template slot="orderItems">
-                        <order-card-item v-for="item in card.orderItems" :key="item.id">
-                            <template slot="amount">{{item.amount}}</template>
-                            <template slot="foodName">{{item.name}}</template>
-                            <template slot="prepTime">{{item.prepTime}}</template>
-                        </order-card-item>
-                    </template>
+                <template slot="sectionReady" class="su-time-line-item-new">
+                    <time-line-item v-for="card in timeSlot[2]" :key="card.orderId"
+                                    :order-id="card.orderId"
+                                    :class="{suHere: card.isHere}"
+                                    class="su-time-line-item-ready">
+                    </time-line-item>
+                </template>
+            </time-line>
+            <div class="su-time-section-footer" v-if="!isEmpty(orderCards)"></div>
+        </div>
+        <div id="su-time-section-box">
+            <!--For each timeSlot generate a new time section-->
+            <time-section v-for="(timeSlot, time) in timeSlots" :key="time">
+                <!--timeSlot[3] is the display time-->
+                <template slot="timeLabel">{{timeSlot[3]}}</template>
 
-                    <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
-                </order-card>
-            </template>
+                <template slot="sectionNew">
+                    <!--For each orderCard in that time section generate a new order card-->
+                    <order-card v-for="card in timeSlot[0]" :key="card.orderId"
+                                :order-id="card.orderId"
+                                :class="{suHereNew: card.isHere, highlighted: card.isHighlighted}"
+                                :id="'su-card-' + card.orderId">
+                        <template slot="arrivalTime">{{card.displayTime}}</template>
+                        <template slot="ownerName">{{card.ownerName}}</template>
+                        <template slot="priceTotal">{{card.priceTotal}}</template>
 
-            <template slot="sectionMaking">
-                <!--For each orderCard in that time section generate a new order card-->
-                <order-card v-for="card in timeSlot[1]" :key="card.orderId"
-                            :order-id="card.orderId"
-                            :class="{suHereMaking: card.isHere, highlighted: card.isHighlighted}"
-                            :id="'su-card-' + card.orderId">
-                    <template slot="arrivalTime">{{card.displayTime}}</template>
-                    <template slot="ownerName">{{card.ownerName}}</template>
-                    <template slot="priceTotal">{{card.priceTotal}}</template>
+                        <!--For each order item in the orderCard generate a new order card item-->
+                        <template slot="orderItems">
+                            <order-card-item v-for="item in card.orderItems" :key="item.id">
+                                <template slot="amount">{{item.amount}}</template>
+                                <template slot="foodName">{{item.name}}</template>
+                                <template slot="prepTime">{{item.prepTime}}</template>
+                            </order-card-item>
+                        </template>
 
-                    <!--For each order item in the orderCard generate a new order card item-->
-                    <template slot="orderItems">
-                        <order-card-item v-for="item in card.orderItems" :key="item.id" >
-                            <template slot="amount">{{item.amount}}</template>
-                            <template slot="foodName">{{item.name}}</template>
-                            <template slot="prepTime">{{item.prepTime}}</template>
-                        </order-card-item>
-                    </template>
+                        <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
+                    </order-card>
+                </template>
 
-                    <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
-                </order-card>
-            </template>
+                <template slot="sectionMaking">
+                    <!--For each orderCard in that time section generate a new order card-->
+                    <order-card v-for="card in timeSlot[1]" :key="card.orderId"
+                                :order-id="card.orderId"
+                                :class="{suHereMaking: card.isHere, highlighted: card.isHighlighted}"
+                                :id="'su-card-' + card.orderId">
+                        <template slot="arrivalTime">{{card.displayTime}}</template>
+                        <template slot="ownerName">{{card.ownerName}}</template>
+                        <template slot="priceTotal">{{card.priceTotal}}</template>
 
-            <template slot="sectionReady">
-                <!--For each orderCard in that time section generate a new order card-->
-                <order-card v-for="card in timeSlot[2]" :key="card.orderId"
-                            :order-id="card.orderId"
-                            :class="{suHereReady: card.isHere, highlighted: card.isHighlighted}"
-                            :id="'su-card-' + card.orderId">
-                    <template slot="arrivalTime">{{card.displayTime}}</template>
-                    <template slot="ownerName">{{card.ownerName}}</template>
-                    <template slot="priceTotal">{{card.priceTotal}}</template>
+                        <!--For each order item in the orderCard generate a new order card item-->
+                        <template slot="orderItems">
+                            <order-card-item v-for="item in card.orderItems" :key="item.id" >
+                                <template slot="amount">{{item.amount}}</template>
+                                <template slot="foodName">{{item.name}}</template>
+                                <template slot="prepTime">{{item.prepTime}}</template>
+                            </order-card-item>
+                        </template>
 
-                    <!--For each order item in the orderCard generate a new order card item-->
-                    <template slot="orderItems">
-                        <order-card-item v-for="item in card.orderItems" :key="item.id">
-                            <template slot="amount">{{item.amount}}</template>
-                            <template slot="foodName">{{item.name}}</template>
-                            <template slot="prepTime">{{item.prepTime}}</template>
-                        </order-card-item>
-                    </template>
+                        <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
+                    </order-card>
+                </template>
 
-                    <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
-                </order-card>
-            </template>
-        </time-section>
-        <div class="su-time-section-footer" v-if="!isEmpty(orderCards)"></div>
+                <template slot="sectionReady">
+                    <!--For each orderCard in that time section generate a new order card-->
+                    <order-card v-for="card in timeSlot[2]" :key="card.orderId"
+                                :order-id="card.orderId"
+                                :class="{suHereReady: card.isHere, highlighted: card.isHighlighted}"
+                                :id="'su-card-' + card.orderId">
+                        <template slot="arrivalTime">{{card.displayTime}}</template>
+                        <template slot="ownerName">{{card.ownerName}}</template>
+                        <template slot="priceTotal">{{card.priceTotal}}</template>
+
+                        <!--For each order item in the orderCard generate a new order card item-->
+                        <template slot="orderItems">
+                            <order-card-item v-for="item in card.orderItems" :key="item.id">
+                                <template slot="amount">{{item.amount}}</template>
+                                <template slot="foodName">{{item.name}}</template>
+                                <template slot="prepTime">{{item.prepTime}}</template>
+                            </order-card-item>
+                        </template>
+
+                        <template slot="totalPrepTime">{{card.totalPrepTime}}</template>
+                    </order-card>
+                </template>
+            </time-section>
+            <div class="su-time-section-footer" v-if="!isEmpty(orderCards)"></div>
+        </div>
     </div>
 </div>
 </template>
@@ -135,6 +154,8 @@ export default {
             refreshInterval: 5000, // milliseconds
             // scrollOptions defines the way the scrolling behaves when clicking on
             // a card on the TimeLine
+            refreshTimer: null,
+
             scrollOptions: {
                 container: '#su-time-section-box', // element to scroll
                 easing: 'ease-in',
@@ -198,11 +219,16 @@ export default {
         },
 
         parseOrder(unparsedOrder) {
+            let cas_prevzema = unparsedOrder.cas_prevzema;
+            if (cas_prevzema.slice(-1) !== "Z") {
+                cas_prevzema = cas_prevzema + "Z"
+            }
+            
             let parsedOrder = {
                 orderId: unparsedOrder.id_narocila,
                 orderStatus: unparsedOrder.status,
                 isHere: unparsedOrder.checked_in,
-                arrivalTime: new Date(unparsedOrder.cas_prevzema),
+                arrivalTime: new Date(cas_prevzema),
                 displayTime: "",
                 ownerName: unparsedOrder.id_uporabnik,
                 priceTotal: unparsedOrder.cena,
@@ -218,16 +244,56 @@ export default {
             // parse the orderItems
             Object.keys(unparsedOrder.jedi).forEach(indexJedi => {
                 let unparsedItem = unparsedOrder.jedi[indexJedi];
-                parsedOrder.totalPrepTime += unparsedItem.cena; // TODO prep time namesto cena
+                let tempPrep = Math.floor((Math.random() * (20 - 5) + 5));
+                parsedOrder.totalPrepTime += tempPrep; // TODO prep time namesto cena
                 parsedOrder.orderItems.push({
                     id: unparsedItem.id_jed,
                     amount: unparsedItem.kolicina,
                     name: unparsedItem.ime_jedi,
-                    prepTime: unparsedItem.cena // TODO prep time namesto cena
+                    prepTime: tempPrep,
+                    price: unparsedItem.cena
                 });
             });
 
             return parsedOrder;
+        },
+
+        updateOrders () {
+            let self = this;
+            let orderirir = this.orderCards;
+            axios.get(serverUrl + 'orders/refresh/?id_restavracija=6')
+                .then(function (response) {
+                        //self = this;
+                        console.log('Refresh data', response.data);
+                        if (response.data.new_orders.length !== 0){
+                            // TODO remove log
+                            //console.log(self.orderCards);
+                            console.log('Refresh data rcv', response.data);
+                            // Parse each card from the server response data and insert the parsed order
+                            // in the view's orderCards dict
+                            Object.keys(response.data.new_orders).forEach(objectId => {
+                                let parsedOrder = self.parseOrder(response.data.new_orders[objectId]);
+                                self.orderCards.push(parsedOrder);
+                            });
+
+                            self.orderCards.sort(function (card1, card2) {
+                                return card1.arrivalTime - card2.arrivalTime;
+                            });
+                        }
+                        if (response.data.cancelled_orders.length !== 0) {
+                            console.log('Cancelled', response.data);
+                            for (let i = self.orderCards.length - 1; i >= 0; i--) {
+                                if (response.data.cancelled_orders.includes(self.orderCards[i].orderId)) {
+                                    self.orderCards.splice(i, 1);
+                                }
+                            }
+                        }
+
+                        // TODO checked in users
+                    }
+                ).catch(function (error) {
+                console.log('refresh error', error);
+            });
         },
 
         // Extracts the hour and minute from the full date,
@@ -262,22 +328,33 @@ export default {
     mounted() {
         // the this of the vue object is not accessible inside other functions
         // in order to be acceded it must be stored in a variable
-        self = this;
+        let orderCards = this.orderCards;
+        let scrollOptions = this.scrollOptions;
+
+        // Unbind all events from event bus, so they don't trigger multiple times
+        EventBus.$off();
 
         // When a status of the card is changed intercept the event
         // and move the card in the next status group (New => Cooking => Ready => Done)
         EventBus.$on('changeStatus', orderId => {
-            let clickedOrderCard = self.orderCards.filter(orderCard => {
-                return orderCard.orderId === orderId;
-            })[0];
+            let clickedOrderCard = null;
+            let orderIndex = -1;
+
+            orderCards.forEach(function (orderCard, i) {
+                if (orderCard.orderId === orderId) {
+                    clickedOrderCard = orderCard;
+                    orderIndex = i;
+                }
+            });
+
             // If the current status is Ready, remove the card from the list
             if (clickedOrderCard.orderStatus === 2) {
-                this.$delete(self.orderCards, orderId);
+                orderCards.splice(orderIndex, 1);
+                //this.$delete(self.orderCards, orderId);
+                //self.orderCards
             }
-            // Else move it in the next status group
-            else {
-                clickedOrderCard.orderStatus += 1;
-            }
+            // Move it in the next status group
+            clickedOrderCard.orderStatus += 1;
 
             // Update the server
             axios.post(serverUrl + 'orders/status_update/', {
@@ -291,13 +368,13 @@ export default {
         });
 
         // Determine what happens when the user highlights the tiny card in the TimeLine
-        EventBus.$on('highlight', async function(orderId) {
-            let clickedOrderCard = self.orderCards.filter(orderCard => {
+        EventBus.$on('highlight', function(orderId) {
+            let clickedOrderCard = orderCards.filter(orderCard => {
                 return orderCard.orderId === orderId;
             })[0];
             clickedOrderCard.isHighlighted = true;
             let scrollId = '#su-card-' + orderId; // the ID of the object we scroll to
-            VueScrollTo.scrollTo(scrollId, 200, self.scrollOptions);
+            VueScrollTo.scrollTo(scrollId, 200, scrollOptions);
             // The user has to wait 1 second, before they can highlight the item again
             setTimeout(function () {
                 clickedOrderCard.isHighlighted = false;
@@ -306,34 +383,10 @@ export default {
         });
 
         // TODO Periodically refresh the page with new orders from the server
-        /*setInterval(function () {
-            let self = this;
-            axios.get(serverUrl + 'orders/refresh/?id_restavracija=6')
-                .then(function (response) {
-                    console.log('Refresh data', response.data);
-                    if (response.data.new_orders.length !== 0){
-                        // TODO remove log
-                        console.log('Refresh data rcv', response.data);
-                        // Parse each card from the server response data and insert the parsed order
-                        // in the view's orderCards dict
-                        Object.keys(response.data.new_orders).forEach(objectId => {
-                            let parsedOrder = self.parseOrder(response.data.new_orders[objectId]);
-                            // Gotta use $set to make vue recognize the inserted object and make it reactive
-                            self.$set(self.orderCards, parsedOrder.orderId, parsedOrder);
-                        });
-                    }
-                    if (response.data.cancelled_orders.length !== 0) {
-                        console.log('Refresh data rcv', response.data);
-                        response.data.cancelled_orders.forEach(orderId => {
-                            self.$delete(this.orderCards, orderId);
-                        });
-                    }
-                }
-                ).catch(function (error) {
-                    console.log('refresh error', error);
-                });
-        }, this.refreshInterval);*/
-
+        let self = this;
+        this.refreshTimer = setInterval(function () {
+            self.updateOrders();
+        }, self.refreshInterval);
     }
 }
 </script>
@@ -342,22 +395,62 @@ export default {
     @import "../styles/variables";
 
     #su-orders {
+        background: $su-color-primary-pale;
         display: flex;
+        flex-direction: column;
         width: 100%;
         height: 100%;
         background: $su-color-background;
 
-        #su-time-line-box {
-            flex: 1 0 max-content;
-            background: $su-color-primary-pale;
-            overflow-y: scroll;
-            overflow-x: hidden;
+        .su-top-bar {
+            background: $su-color-content-light;
+            align-items: stretch;
+            display: inline-flex;
+            flex-shrink: 0;
+            margin-bottom: 8px;
+            box-shadow: $su-shadow;
+
+            div {
+                flex-grow: 3;
+                display: flex;
+                justify-content: center;
+
+                img {
+                    margin: auto 0.5rem auto -4rem;
+                    width: 1.2rem;
+                    height: 1.2rem;
+                }
+
+                p {
+                    font-weight: bold;
+                    color: $su-color-dark-gray;
+                }
+            }
+
+            .pregled {
+                flex-grow: 1;
+
+                img {
+                    margin-left: -1rem;
+                }
+            }
         }
 
-        #su-time-section-box {
-            flex: 8 1 auto;
-            overflow-y: auto;
-            overflow-x: hidden;
+        #su-orders-container {
+            display: flex;
+
+            #su-time-line-box {
+                flex: 1 0 max-content;
+                background: $su-color-primary-pale;
+                overflow-y: scroll;
+                overflow-x: hidden;
+            }
+
+            #su-time-section-box {
+                flex: 8 1 auto;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
         }
     }
 

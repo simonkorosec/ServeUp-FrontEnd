@@ -36,7 +36,7 @@
 
         .su-history-line-divider {
             position: sticky;
-            background: $su-color-content-light;
+            background: $su-color-background;
             box-shadow: $su-shadow;
             z-index: 10;
             width: 100%;
@@ -46,7 +46,7 @@
             p {
                 margin: 8px;
                 font-weight: bold;
-                color: $su-color-dark-gray;
+                color: $su-color-primary-dark;
             }
         }
 

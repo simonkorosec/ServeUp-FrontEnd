@@ -2,7 +2,7 @@
     <div class="su-order-item-body">
         <p><slot name="amount"></slot>x</p>
         <p><slot name="foodName"></slot></p>
-        <p><slot name="prepTime"></slot></p>
+        <p><slot name="prepTime"></slot>m</p>
     </div>
 </template>
 

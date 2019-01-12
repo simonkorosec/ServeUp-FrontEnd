@@ -19,6 +19,7 @@
 
 <script>
     import axios from 'axios';
+    import {serverUrl} from "../Events";
 
     export default {
         name:'Register',
@@ -37,7 +38,7 @@
                     this.error="Vsi podatki morajo biti vnešeni";
                 }
                 else{
-                    axios.post('https://serveup-backend.herokuapp.com/api/admin_user/register/', {
+                    axios.post(serverUrl + 'api/admin_user/register/', {
                         email: this.email,
                         password: this.password,
                         format: 'json',
