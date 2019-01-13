@@ -10,7 +10,6 @@
             <button type="button" v-on:click="register()">Sign up</button><br><br>
             <label>Already have account?</label><br>
             <router-link to="/" class="link">Log in</router-link>
-            <router-link to="/QR" class="link">qr</router-link>
 
         </form>
 
