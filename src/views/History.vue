@@ -256,7 +256,8 @@
 
         created() {
             let self = this;
-            axios.get(serverUrl + 'orders/?id_restavracija=6')
+            let rId =  this.$session.get('restaurantId');
+            axios.get(serverUrl + 'orders/?id_restavracija=' + rId)
                 .then(function (response) {
                     // TODO remove log
                     console.log('Response data', response.data.data);

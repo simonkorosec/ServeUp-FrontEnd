@@ -42,7 +42,8 @@
                         console.log("Uporabnik obstaja");
                         this.$router.push({ path: "/home/orders" });
                         this.$session.start();
-                        this.$session.set('jwt', 'test');
+                        this.$session.set('restaurantId', response.data.id_restavracija);
+                        console.log("Session", this.$session.getAll());
                     }).catch(error => {
                         console.log(error);
                         this.error=error.response.data.description;

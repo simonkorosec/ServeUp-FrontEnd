@@ -234,8 +234,8 @@ export default {
                 priceTotal: unparsedOrder.cena,
                 totalPrepTime: 0,
                 isHighlighted: false,
-                // TODO parse the order items as well
-                orderItems: [/*{id: 0, amount: 10, name: "Pizza", prepTime: 20}, {id: 1, amount: 19, name: "Taco", prepTime: 20},{id: 3, amount: 19, name: "Taco", prepTime: 20}*/]
+                tableName: '',
+                orderItems: []
             };
 
             // set the time that will be displayed in the DOM
@@ -261,7 +261,8 @@ export default {
         updateOrders () {
             let self = this;
             let orderirir = this.orderCards;
-            axios.get(serverUrl + 'orders/refresh/?id_restavracija=6')
+            let rId = this.$session.get('restaurantId');
+            axios.get(serverUrl + 'orders/refresh/?id_restavracija=' + rId)
                 .then(function (response) {
                         //self = this;
                         console.log('Refresh data', response.data);
@@ -312,7 +313,8 @@ export default {
 
     created() {
         let self = this;
-        axios.get(serverUrl + 'orders/?id_restavracija=6')
+        let rId =  this.$session.get('restaurantId');
+        axios.get(serverUrl + 'orders/?id_restavracija=' + rId)
             .then(function (response) {
                 // TODO remove log
                 console.log('Response data', response.data.data);

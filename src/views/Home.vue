@@ -45,6 +45,7 @@ export default {
         }
     },
 
+    // TODO uncomment
     beforeCreate: function () {
             try{
                 if (this.$session.exists()) {
