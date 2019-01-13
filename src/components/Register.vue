@@ -38,7 +38,7 @@
                     this.error="Vsi podatki morajo biti vnešeni";
                 }
                 else{
-                    axios.post(serverUrl + 'api/admin_user/register/', {
+                    axios.post(serverUrl + 'admin_user/register/', {
                         email: this.email,
                         password: this.password,
                         format: 'json',
