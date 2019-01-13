@@ -108,4 +108,36 @@
         color:#00c4ab;
         text-decoration: none;
     }
+
+    .su-card-wrapper {
+        margin: 0;
+        min-width: 25%;
+        max-width: 25%;
+        padding: 16px;
+    }
+
+    .su-history-line-item-wrapper {
+        margin: 0;
+        min-width: 25%;
+        max-width: 25%;
+        height: 3rem;
+        padding: 8px;
+    }
+
+    @media screen and (max-width:1800px) {
+        .su-card-wrapper {
+            margin: 0;
+            min-width: 33%;
+            max-width: 33%;
+            padding: 16px;
+        }
+
+        .su-history-line-item-wrapper {
+            margin: 0;
+            min-width: 33%;
+            max-width: 33%;
+            height: 3rem;
+            padding: 8px;
+        }
+    }
 </style>

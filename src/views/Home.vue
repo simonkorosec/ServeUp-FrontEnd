@@ -45,7 +45,7 @@ export default {
         }
     },
 
-    /*beforeCreate: function () {
+    beforeCreate: function () {
             try{
                 if (this.$session.exists()) {
                     console.log('obstaja');
@@ -60,7 +60,7 @@ export default {
                 this.$router.push({ name: "login" });
             }
 
-    }*/
+    }
 }
 </script>
 
@@ -74,6 +74,7 @@ export default {
 
         #nav {
             width: 15rem;
+            min-width: 15rem !important;
             display: flex;
             flex-direction: column;
             background: $su-color-primary-dark;

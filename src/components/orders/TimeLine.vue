@@ -44,6 +44,7 @@
         flex-direction: column;
 
         .su-time-line-divider {
+            cursor: pointer;
             position: sticky;
             background: $su-color-content-light;
             box-shadow: $su-shadow;

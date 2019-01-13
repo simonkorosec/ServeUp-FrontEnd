@@ -1,14 +1,20 @@
 <template>
     <div id="su-history">
         <div class="su-history-date">
-            <button v-on:click="prevTab"> < </button>
-            <p>{{getDisplayDate(currentDate)}}</p>
-            <button v-on:click="nextTab()"> > </button>
+            <button v-on:click="prevTab" :class="{grayed: noPrev}"> < </button>
+            <p @click="showCalendar = !showCalendar">{{getDisplayDate(currentDate)}}</p>
+            <button v-on:click="nextTab" :class="{grayed: noNext}"> > </button>
+            <div class="su-history-calendar" v-if="showCalendar">
+                <p class="su-calendar-title">Pick a day</p>
+                <p v-for="date in dates" @click="toDate(date)">
+                    {{getDisplayDate(date)}}
+                </p>
+            </div>
         </div>
         <div class="su-history-container">
             <div class="su-history-line-box">
-                <history-line v-for="timeSlot in timeSlots" :key="timeSlot[1]">
-                    <template slot="timeLabel">10:30</template>
+                <history-line v-for="timeSlot in historyTabs[currentDate][0]" :key="timeSlot[1]">
+                    <template slot="timeLabel">{{timeSlot[1]}}</template>
                     <template slot="lineItems">
                         <history-line-item v-for="card in timeSlot[0]" :key="card.orderId" :order-id="card.orderId">
 
@@ -22,7 +28,7 @@
                     <history-section v-for="timeSlot in tab[0]">
                         <template slot="timeLabel">{{timeSlot[1]}}</template>
                         <template slot="historyCards">
-                            <history-card v-for="card in timeSlot[0]" :key="card.orderId">
+                            <history-card v-for="card in timeSlot[0]" :key="card.orderId" :order-id="card.orderId">
                                 <template slot="arrivalTime">{{card.displayTime}}</template>
                                 <template slot="ownerName">{{card.ownerName}}</template>
                                 <template slot="priceTotal">{{card.priceTotal}}</template>
@@ -53,6 +59,7 @@
     import {serverUrl} from "../Events";
     import HistoryLine from "../components/history/HistoryLine";
     import HistoryLineItem from "../components/history/HistoryLineItem";
+    import VueScrollTo from "vue-scrollto/src/directive";
 
     export default {
         name: "History",
@@ -60,9 +67,31 @@
 
         data() {
             return {
+                monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'],
                 orderCards: [],
                 dates: [],
-                currentDate: null
+                currentDate: new Date(),
+                noPrev: false,
+                noNext: true,
+                showCalendar: false,
+                scrollOptions: {
+                    container: '#su-time-section-box', // element to scroll
+                    easing: 'ease-in',
+                    offset: -60,
+                    force: true, // force scroll even if the object is in view
+                    cancelable: true,
+                    onStart: function(element) {
+                        //console.log('started scrolling')
+                    },
+                    onDone: function(element) {
+                        //console.log('stopped scrolling')
+                    },
+                    onCancel: function() {
+                        // scrolling has been interrupted
+                    },
+                    x: false,
+                    y: true
+                },
             }
         },
 
@@ -173,19 +202,38 @@
                 return parsedOrder;
             },
 
-            nextTab() {
+            toDate(date) {
+                this.currentDate = date;
+                this.showCalendar = false;
+            },
+
+            prevTab() {
                 for (let i = 0; i < this.dates.length; i++) {
                     if (this.dates[i] === this.currentDate && i < this.dates.length-1) {
                         this.currentDate = this.dates[i+1];
+                        this.noNext = false;
+                        if (i+1 === this.dates.length - 1) {
+                            this.noPrev = true;
+                        }
+                        else {
+                            this.noPrev = false;
+                        }
                         break;
                     }
                 }
             },
 
-            prevTab() {
+            nextTab() {
                 for (let i = 0; i < this.dates.length; i++) {
                     if (this.dates[i] === this.currentDate && i > 0) {
                         this.currentDate = this.dates[i-1];
+                        this.noPrev = false;
+                        if (i-1 === 0) {
+                            this.noNext = true;
+                        }
+                        else {
+                            this.noNext = false;
+                        }
                         break;
                     }
                 }
@@ -195,10 +243,13 @@
                 if (time === null) {
                     return 'TIME'
                 }
-                return "" + time.getDate() + "." + ('0' + time.getMonth()).slice(-2) + '.' + time.getFullYear();
+                return "" + time.getDate() + ". " + this.monthNames[time.getMonth()] + ' ' + time.getFullYear();
             },
 
             getDisplayTime(time) {
+                if (time === null) {
+                    return 'TIME'
+                }
                 return "" + time.getHours() + ":" + ('0' + time.getMinutes()).slice(-2);
             },
         },
@@ -219,10 +270,34 @@
                     });
 
                     self.orderCards.sort(function (card1, card2) {
-                        return card1.arrivalTime - card2.arrivalTime;
+                        return card2.arrivalTime - card1.arrivalTime;
                     });
                 });
         },
+
+        mounted() {
+            let orderCards = this.orderCards;
+            let scrollOptions = this.scrollOptions;
+
+            EventBus.$on('highlightHis', function(orderId) {
+                let clickedOrderCard = orderCards.filter(orderCard => {
+                    return orderCard.orderId === orderId;
+                })[0];
+                clickedOrderCard.isHighlightedH = true;
+                let scrollId = '#su-card-h-' + orderId; // the ID of the object we scroll to
+                //VueScrollTo.scrollTo(scrollId, 200, scrollOptions);
+                // The user has to wait 1 second, before they can highlight the item again
+                /*setTimeout(function () {
+                    clickedOrderCard.isHighlighted = false;
+                    console.log("timeout");
+                }, 1000);*/
+            });
+        },
+
+        beforeDestroy() {
+            EventBus.$off('highlight')
+            //console.log('destroyed');
+        }
     }
 </script>
 
@@ -230,20 +305,115 @@
     @import "../styles/variables";
 
     #su-history {
+        background: $su-color-background;
         display: flex;
         flex-direction: column;
         width: 100%;
         height: 100%;
-        background: $su-color-background;
 
         .su-history-date {
             background: $su-color-content-light;
             margin-bottom: 8px;
             box-shadow: $su-shadow;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-shrink: 0;
+
+            .su-history-calendar {
+                position: absolute;
+                padding: 1rem;
+                padding-top: 0rem;
+                top: 4rem;
+                width: 20rem;
+                background: $su-color-content-light;
+                z-index: 100;
+                border-radius: 8px;
+                box-shadow: 0 16px 85px 17px rgba(0,0,0,0.35);
+            }
 
             p {
-                font-weight: bold;
+                margin: 0.5rem;
+                padding: 0.5rem 1.5em 0.5rem 1.5rem;
+                background: $su-color-secondary;
+                color: $su-color-content-light;
+                box-shadow: $su-shadow;
+                border: none;
+                border-radius: $su-border-radius-m;
+                cursor: pointer;
+
+                &:hover {
+                    box-shadow: $su-shadow-hover;
+                }
+
+                &:active {
+                    background: $su-color-secondary-dark;
+                }
+
+                &:focus {
+                    outline:0;
+                }
+            }
+
+            .su-calendar-title {
+                font-size: 1.2rem;
+                background: none;
+                box-shadow: none;
                 color: $su-color-dark-gray;
+                cursor: default;
+
+                &:hover {
+                    box-shadow: none;
+                }
+
+                &:active {
+                    background: none;
+                }
+
+                &:focus {
+                    outline:0;
+                }
+            }
+
+            button {
+                cursor: pointer;
+                font-weight: bold;
+                padding: 0.5rem 1rem;
+                background: $su-color-secondary;
+                color: $su-color-content-light;
+                box-shadow: $su-shadow;
+                border: none;
+                border-radius: $su-border-radius-m;
+
+                &:hover {
+                    box-shadow: $su-shadow-hover;
+                }
+
+                &:active {
+                    background: $su-color-secondary-dark;
+                }
+
+                &:focus {
+                    outline:0;
+                }
+            }
+
+            .grayed {
+                background: $su-color-dark-gray;
+                color: $su-color-light-gray;
+                cursor: default;
+
+                &:hover {
+                    box-shadow: $su-shadow;
+                }
+
+                &:active {
+                    background: $su-color-dark-gray;
+                }
+
+                &:focus {
+                    outline:0;
+                }
             }
         }
 

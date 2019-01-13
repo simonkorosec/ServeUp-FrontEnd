@@ -27,11 +27,6 @@
     @import "../../styles/variables";
 
     .su-history-line-item-wrapper {
-        margin: 0;
-        min-width: 25%;
-        max-width: 25%;
-        height: 3rem;
-        padding: 8px;
 
         .su-history-line-item {
             background: $su-color-background;

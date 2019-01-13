@@ -36,6 +36,7 @@
 
         .su-history-line-divider {
             position: sticky;
+            cursor: pointer;
             background: $su-color-background;
             box-shadow: $su-shadow;
             z-index: 10;

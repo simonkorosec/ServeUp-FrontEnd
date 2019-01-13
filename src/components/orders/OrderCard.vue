@@ -104,7 +104,7 @@ export default {
                 box-shadow: $su-shadow;
                 border: none;
                 border-radius: $su-border-radius-m;
-
+                cursor: pointer;
 
                 &:active {
                     background: $su-color-secondary-dark;

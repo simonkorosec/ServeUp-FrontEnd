@@ -290,6 +290,13 @@ export default {
                         }
 
                         // TODO checked in users
+                        if (response.data.checked_in_orders) {
+                            for (let i = self.orderCards.length - 1; i >= 0; i--) {
+                                if (response.data.checked_in_orders.includes(self.orderCards[i].orderId)) {
+                                    self.orderCards[i].isHere = true;
+                                }
+                            }
+                        }
                     }
                 ).catch(function (error) {
                 console.log('refresh error', error);
@@ -387,6 +394,13 @@ export default {
         this.refreshTimer = setInterval(function () {
             self.updateOrders();
         }, self.refreshInterval);
+    },
+
+    beforeDestroy() {
+        clearInterval(this.refreshTimer);
+        EventBus.$off('changeStatus');
+        EventBus.$off('highlight')
+        //console.log('destroyed');
     }
 }
 </script>
@@ -395,7 +409,6 @@ export default {
     @import "../styles/variables";
 
     #su-orders {
-        background: $su-color-primary-pale;
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -438,6 +451,10 @@ export default {
 
         #su-orders-container {
             display: flex;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            box-shadow: $su-shadow;
 
             #su-time-line-box {
                 flex: 1 0 max-content;

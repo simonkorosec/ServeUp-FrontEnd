@@ -28,6 +28,7 @@
         height: 2.5rem;
         border-radius: 0.2rem;
         margin: 16px 8px;
+        cursor: pointer;
 
         &:hover {
             @include su-mx-shadow-hover($su-shadow, $su-shadow-hover);

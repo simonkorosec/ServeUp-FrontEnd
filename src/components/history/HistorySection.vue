@@ -36,6 +36,7 @@
 
         .su-history-time-section-divider {
             position: sticky;
+            cursor: pointer;
             background: $su-color-content-light;
             box-shadow: $su-shadow;
             z-index: 10;

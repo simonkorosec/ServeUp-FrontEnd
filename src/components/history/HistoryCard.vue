@@ -1,6 +1,6 @@
 <template>
     <div class="su-card-wrapper">
-        <div class="su-history-card-body" :class="highlighted=isHighlighted">
+        <div class="su-history-card-body" :class="highlightedH=isHighlightedH" :id="'su-card-h-' + orderId">
             <div class="su-history-card-header">
                 <p class="su-history-card-owner">ID:<slot name="ownerName"></slot></p>
                 <p class="su-history-card-time">ob <slot name="arrivalTime"></slot></p>
@@ -15,7 +15,15 @@
 
 <script>
     export default {
-        name: "HistoryCard"
+        name: "HistoryCard",
+        props: {
+            orderId: Number
+        },
+        data() {
+            return {
+                isHighlightedH: false,
+            }
+        },
     }
 </script>
 
@@ -36,10 +44,6 @@
     }
 
     .su-card-wrapper {
-        margin: 0;
-        min-width: 25%;
-        max-width: 25%;
-        padding: 16px;
 
         .su-history-card-body {
             box-sizing: border-box;
@@ -73,9 +77,7 @@
         }
     }
 
-
-
-    .highlighted {
+    .highlightedH {
         animation-name: flash-animation;
         animation-duration: 1s;
     }

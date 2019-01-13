@@ -52,6 +52,7 @@
             width: 100%;
             top: 0;
             left: 0;
+            cursor: pointer;
             p {
                 font-weight: bold;
                 color: $su-color-dark-gray;
