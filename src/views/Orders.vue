@@ -455,6 +455,7 @@ export default {
             height: 100%;
             z-index: 10;
             box-shadow: $su-shadow;
+            min-height:0;
 
             #su-time-line-box {
                 flex: 1 0 max-content;

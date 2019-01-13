@@ -423,6 +423,7 @@
             height: 100%;
             z-index: 10;
             box-shadow: $su-shadow;
+            min-height:0;
         }
 
         .su-history-line-box {
