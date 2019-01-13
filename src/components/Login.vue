@@ -23,8 +23,8 @@
         name: 'Login',
         data() {
             return {
-                email: "peter@gmail.com",
-                password: "pan",
+                email: "",
+                password: "",
                 error:""
             }
         },

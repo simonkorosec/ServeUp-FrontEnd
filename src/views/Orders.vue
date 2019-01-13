@@ -50,6 +50,9 @@
             <div class="su-time-section-footer" v-if="!isEmpty(orderCards)"></div>
         </div>
         <div id="su-time-section-box">
+            <div v-if="noOrders">
+                <p class="su-no-orders">Trenutno ni naročil</p>
+            </div>
             <!--For each timeSlot generate a new time section-->
             <time-section v-for="(timeSlot, time) in timeSlots" :key="time">
                 <!--timeSlot[3] is the display time-->
@@ -180,6 +183,13 @@ export default {
     computed: {
         // Builds an array of time slots out of orders
         // Structure: timeSlots{timeSlot1[New][Cooking][Ready], timeSlot2[New][Cooking][Ready], ...}
+        noOrders: function () {
+            if(this.orderCards.length === 0) {
+                return true
+            }
+            return false
+        },
+
         timeSlots: function () {
             let timeSlots = {};
             this.orderCards.forEach(orderCard => {
@@ -241,7 +251,7 @@ export default {
             // set the time that will be displayed in the DOM
             parsedOrder.displayTime = this.getDisplayTime(parsedOrder.arrivalTime);
             
-            if (unparsedOrder.id_miza !== null) {
+            if (unparsedOrder.id_miza !== null && typeof unparsedOrder.id_miza !== 'undefined') {
                 parsedOrder.tableName = unparsedOrder.id_miza;
             }
             else {
@@ -298,13 +308,13 @@ export default {
                         }
 
                         // TODO checked in users
-                        if (response.data.checked_in_orders) {
+                        if (response.data.checked_in_orders.length !== 0) {
                             let checkedIn = response.data.checked_in_orders;
                             for (let i = self.orderCards.length - 1; i >= 0; i--) {
                                 for (let j = 0; j < checkedIn.length; j++) {
                                     if (checkedIn[j].id_narocila === self.orderCards[i].orderId) {
                                         self.orderCards[i].isHere = true;
-                                        self.orderCards[i].tableName = checkedIn.qr_koda;
+                                        self.orderCards[i].tableName = checkedIn[j].qr;
                                     }
                                 }
                             }
@@ -481,6 +491,10 @@ export default {
                 flex: 8 1 auto;
                 overflow-y: auto;
                 overflow-x: hidden;
+
+                .su-no-orders {
+                    font-size: 2rem;
+                }
             }
         }
     }

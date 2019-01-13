@@ -6,6 +6,7 @@ import History from "./views/History.vue"
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import QRCode from "./components/QRCode.vue";
+import Stats from  "./views/Stats.vue"
 
 Vue.use(Router);
 
@@ -41,6 +42,11 @@ export default new Router({
                     path: "QRcode",
                     name: "qrcode",
                     component: QRCode
+                },
+                {
+                    path: "stats",
+                    name: "stats",
+                    component: Stats
                 },
             ]
         },

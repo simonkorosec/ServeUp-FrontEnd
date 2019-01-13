@@ -22,6 +22,11 @@
         margin: 0;
     }
 
+    input:-webkit-autofill {
+        -webkit-box-shadow: inset 0 0 0px 1000000000px #ebebeb;
+        border: none;
+    }
+
     #app {
         background: url(assets/background.png) no-repeat center center fixed;
         -webkit-background-size: cover;
@@ -56,14 +61,29 @@
         position:relative;
         width: 60%;
     }
-    input[type=text],[type=password]{
+    input[type=text] {
         background-color: #ebebeb;
-        border: 1px solid rgba(0, 0, 0, .0);
+        border: 1px solid #ebebeb;
         border-radius: 20px;
         padding: 10px 10px 10px 20px;
         width: 100%;
         margin: 3px 3px 6px;
         color:#444444;
+        outline: none;
+    }
+    input[type=password]{
+        background-color: #ebebeb;
+        border: 1px solid #ebebeb;
+        border-radius: 20px;
+        padding: 10px 10px 10px 20px;
+        width: 100%;
+        margin: 3px 3px 6px;
+        color:#444444;
+        outline: none;
+    }
+    input[type=password]:focus{
+        border: 1px solid #00c4ab;
+        outline:none;
     }
     input[type=text]:focus{
         border: 1px solid #00c4ab;
@@ -77,6 +97,7 @@
         width: 60%;
         margin: 3px;
         color:white;
+        outline:none;
     }
     button[type=button]:hover{
         background-color: #00b39b;

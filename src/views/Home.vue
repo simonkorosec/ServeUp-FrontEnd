@@ -21,14 +21,14 @@
                 <img src="../assets/icons/stats.svg" alt="O">
                 <p>Statistika</p>
             </router-link>
-            <router-link to="/home/discounts" append>
+            <!--<router-link to="/home/discounts" append>
                 <img src="../assets/icons/discounts.svg" alt="O">
                 <p>Popusti</p>
-            </router-link>
+            </router-link>-->
 
-            <router-link id="su-nav-settings" to="/home/settings" append>
+            <router-link id="su-nav-settings" to="/" append @click="logOut">
                 <img src="../assets/icons/settings.svg" alt="O">
-                <p>Nastavitve</p>
+                <p>Log out</p>
             </router-link>
         </div>
         <router-view></router-view>
@@ -45,7 +45,12 @@ export default {
         }
     },
 
-    // TODO uncomment
+    methods: {
+        logOut() {
+            this.$session.destroy();
+        }
+    },
+
     beforeCreate: function () {
             try{
                 if (this.$session.exists()) {

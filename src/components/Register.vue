@@ -2,7 +2,7 @@
     <div class="login">
         <form>
             <img id="su-logo" src="../assets/icons/logo2.svg">
-            <label class="company-name">ServeUp</label><br><br><br><br>
+            <label class="company-name">ServeUp</label>
             <input type="text" v-model="full_name" placeholder="Full name"/><br>
             <input type="text" v-model="email" placeholder="Email"/><br>
             <input type="text" v-model="password" placeholder="Password"/><br>
@@ -37,7 +37,7 @@
                     this.error="Vsi podatki morajo biti vnešeni";
                 }
                 else{
-                    axios.post(serverUrl + 'api/admin_user/register/', {
+                    axios.post(serverUrl + 'admin_user/register/', {
                         email: this.email,
                         password: this.password,
                         format: 'json',
@@ -98,7 +98,7 @@
         font-size: 2rem;
         color: $su-color-primary;
         margin-top: 1rem;
-        margin-bottom: -2rem;
+        margin-bottom: 2rem;
         display: block;
     }
 

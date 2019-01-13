@@ -11,6 +11,8 @@
 </template>
 
 <script>
+    import axios from 'axios';
+    import {serverUrl} from "../Events";
     import QrcodeVue from 'qrcode.vue';
     import QR from "./QR";
     export default {
@@ -47,10 +49,13 @@
             else{
                 console.log('ne obstaja');
             }
-            if (localStorage.items) {
-                this.items ="";
-                this.items = JSON.parse(localStorage.getItem("items"));
-            }
+            axios.get(serverUrl + 'restaurant/fetch_qr/?id_restavracija='+this.$session.get("restaurantId"), {
+            }).then(response => {
+                this.items = response.data.data;
+                console.log(this.items);
+            }).catch(error => {
+                console.log(error);
+            });
         },
         methods:{
             /*add:function () {
@@ -59,11 +64,25 @@
                 }
             },*/
             name:function() {
-                if (this.value !== "" && this.items.indexOf(this.value) === -1) {
-                    this.items.push(this.value);
-                    localStorage.setItem("items", JSON.stringify(this.items));
-                    this.$router.push({ path: "/home/QRCode" });
-                }
+                console.log(this.$session.get("restaurantId"));
+                axios.post(serverUrl + 'restaurant/add_table/', {
+                    id_restavracija: this.$session.get("restaurantId"),
+                    qr: this.value
+                }).then(response => {
+                    console.log(response.status);
+                }).catch(error => {
+                    console.log(error);
+                });
+
+                setTimeout(function () {
+                    axios.get(serverUrl + 'restaurant/fetch_qr/?id_restavracija='+this.$session.get("restaurantId"), {
+                    }).then(response => {
+                        this.items = response.data.data;
+                        console.log(this.items);
+                    }).catch(error => {
+                        console.log(error);
+                    });
+                }.bind(this), 1000);
             },
             printElem() {
                 for (let i = 0; i < 2; i++) {
