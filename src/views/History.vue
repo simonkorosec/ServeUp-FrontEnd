@@ -30,7 +30,7 @@
                         <template slot="historyCards">
                             <history-card v-for="card in timeSlot[0]" :key="card.orderId" :order-id="card.orderId">
                                 <template slot="arrivalTime">{{card.displayTime}}</template>
-                                <template slot="ownerName">{{card.ownerName}}</template>
+                                <template slot="ownerName"></template>
                                 <template slot="priceTotal">{{card.priceTotal}}</template>
 
                                 <template slot="historyItems">
@@ -400,21 +400,7 @@
             }
 
             .grayed {
-                background: $su-color-dark-gray;
-                color: $su-color-light-gray;
-                cursor: default;
 
-                &:hover {
-                    box-shadow: $su-shadow;
-                }
-
-                &:active {
-                    background: $su-color-dark-gray;
-                }
-
-                &:focus {
-                    outline:0;
-                }
             }
         }
 

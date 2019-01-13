@@ -5,9 +5,7 @@
 </template>
 
 <script>
-    import Home from "./views/Home";
     export default {
-        components: {Home}
     }
 </script>
 
@@ -46,6 +44,7 @@
         background-color: white;
         width: 30%;
         height: 100%;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     }
 
     .login form{
@@ -55,17 +54,14 @@
         -webkit-transform: translateX(-50%) translateY(-50%);
         transform: translateX(-50%) translateY(-50%);
         position:relative;
-        width: 50%;
-
-
-
+        width: 60%;
     }
     input[type=text],[type=password]{
         background-color: #ebebeb;
         border: 1px solid rgba(0, 0, 0, .0);
         border-radius: 20px;
         padding: 10px 10px 10px 20px;
-        width: 88%;
+        width: 100%;
         margin: 3px 3px 6px;
         color:#444444;
     }
@@ -78,7 +74,7 @@
         border: none;
         border-radius: 20px;
         padding: 10px;
-        width: 99%;
+        width: 60%;
         margin: 3px;
         color:white;
     }

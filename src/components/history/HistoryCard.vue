@@ -2,8 +2,8 @@
     <div class="su-card-wrapper">
         <div class="su-history-card-body" :class="highlightedH=isHighlightedH" :id="'su-card-h-' + orderId">
             <div class="su-history-card-header">
-                <p class="su-history-card-owner">ID:<slot name="ownerName"></slot></p>
-                <p class="su-history-card-time">ob <slot name="arrivalTime"></slot></p>
+                <p class="su-history-card-owner"><slot name="ownerName"></slot></p>
+                <p class="su-history-card-time">Ob <slot name="arrivalTime"></slot></p>
                 <p class="su-history-card-total"><slot name="priceTotal"></slot>€</p>
             </div>
             <div class="su-history-card-items">

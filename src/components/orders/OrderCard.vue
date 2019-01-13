@@ -1,7 +1,7 @@
 <template>
     <div class="su-order-card-body" :class="highlighted=isHighlighted">
         <div class="su-order-card-header">
-            <p class="su-order-card-owner">ID: <slot name="ownerName"></slot></p>
+            <p class="su-order-card-owner"><slot name="ownerName"></slot></p>
             <p class="su-order-card-time">ob <slot name="arrivalTime"></slot></p>
             <p class="su-order-card-total"><slot name="priceTotal"></slot>€</p>
         </div>

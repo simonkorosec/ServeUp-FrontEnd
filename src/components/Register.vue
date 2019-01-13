@@ -1,7 +1,8 @@
 <template>
     <div class="login">
         <form>
-            <label class="companyName">ServeUp</label><br><br><br><br>
+            <img id="su-logo" src="../assets/icons/logo2.svg">
+            <label class="company-name">ServeUp</label><br><br><br><br>
             <input type="text" v-model="full_name" placeholder="Full name"/><br>
             <input type="text" v-model="email" placeholder="Email"/><br>
             <input type="text" v-model="password" placeholder="Password"/><br>
@@ -10,8 +11,6 @@
             <button type="button" v-on:click="register()">Sign up</button><br><br>
             <label>Already have account?</label><br>
             <router-link to="/" class="link">Log in</router-link>
-            <router-link to="/QR" class="link">qr</router-link>
-
         </form>
 
     </div>
@@ -69,6 +68,14 @@
     }
 </script>
 <style lang="scss" scoped>
+    @import "../styles/variables";
+
+    .login {
+        height: 100%;
+        width: 30rem;
+        padding-bottom: 5rem;
+    }
+
     #error{
         color:rgb(249, 102, 102);
         font-size: 12px;
@@ -76,5 +83,29 @@
         margin-left: 6px;
         margin-bottom: 0;
         margin-top: 0;
+    }
+
+    #error{
+        color:rgb(249, 102, 102);
+        font-size: 12px;
+        text-align: left;
+        margin-left: 6px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+
+    .company-name {
+        font-size: 2rem;
+        color: $su-color-primary;
+        margin-top: 1rem;
+        margin-bottom: -2rem;
+        display: block;
+    }
+
+    #su-logo {
+        height: 10rem;
+        display: block;
+        margin: auto;
+        position: relative;
     }
 </style>

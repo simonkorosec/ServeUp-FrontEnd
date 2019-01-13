@@ -1,17 +1,19 @@
 <template>
     <div class="login">
         <form>
-            <label class="companyName">ServeUp</label><br><br><br><br>
+            <img id="su-logo" src="../assets/icons/logo2.svg">
+            <label class="company-name">ServeUp</label>
             <input type="text" name="email" v-model="email" placeholder="Email"/><br>
             <input type="password" name="password" v-model="password" placeholder="Password"/><br>
             <p id="error">{{error}}</p>
+
             <p class="forgot_pass">Forgot password?</p><br>
             <button type="button" v-on:click="login()">Log in</button><br><br>
+
             <label>Don't have an account?</label><br>
             <router-link to="/sing_up" class="link">Sign up</router-link>
-            </form>
-        </div>
-
+        </form>
+    </div>
 </template>
 <script>
     import axios from 'axios';
@@ -57,6 +59,14 @@
     }
 </script>
 <style lang="scss" scoped>
+    @import "../styles/variables";
+
+    .login {
+        height: 100%;
+        width: 30rem;
+        padding-bottom: 5rem;
+    }
+
     #error{
         color:rgb(249, 102, 102);
         font-size: 12px;
@@ -64,5 +74,20 @@
         margin-left: 6px;
         margin-bottom: 0px;
         margin-top: 0px;
+    }
+
+    .company-name {
+        font-size: 2rem;
+        color: $su-color-primary;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+        display: block;
+    }
+
+    #su-logo {
+        height: 10rem;
+        display: block;
+        margin: auto;
+        position: relative;
     }
 </style>

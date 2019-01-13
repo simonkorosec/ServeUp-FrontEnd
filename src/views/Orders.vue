@@ -62,7 +62,7 @@
                                 :class="{suHereNew: card.isHere, highlighted: card.isHighlighted}"
                                 :id="'su-card-' + card.orderId">
                         <template slot="arrivalTime">{{card.displayTime}}</template>
-                        <template slot="ownerName">{{card.ownerName}}</template>
+                        <template slot="ownerName">{{card.tableName}}</template>
                         <template slot="priceTotal">{{card.priceTotal}}</template>
 
                         <!--For each order item in the orderCard generate a new order card item-->
@@ -85,7 +85,7 @@
                                 :class="{suHereMaking: card.isHere, highlighted: card.isHighlighted}"
                                 :id="'su-card-' + card.orderId">
                         <template slot="arrivalTime">{{card.displayTime}}</template>
-                        <template slot="ownerName">{{card.ownerName}}</template>
+                        <template slot="ownerName">{{card.tableName}}</template>
                         <template slot="priceTotal">{{card.priceTotal}}</template>
 
                         <!--For each order item in the orderCard generate a new order card item-->
@@ -108,7 +108,7 @@
                                 :class="{suHereReady: card.isHere, highlighted: card.isHighlighted}"
                                 :id="'su-card-' + card.orderId">
                         <template slot="arrivalTime">{{card.displayTime}}</template>
-                        <template slot="ownerName">{{card.ownerName}}</template>
+                        <template slot="ownerName">{{card.tableName}}</template>
                         <template slot="priceTotal">{{card.priceTotal}}</template>
 
                         <!--For each order item in the orderCard generate a new order card item-->
@@ -223,7 +223,7 @@ export default {
             if (cas_prevzema.slice(-1) !== "Z") {
                 cas_prevzema = cas_prevzema + "Z"
             }
-            
+            console.log(unparsedOrder);
             let parsedOrder = {
                 orderId: unparsedOrder.id_narocila,
                 orderStatus: unparsedOrder.status,
@@ -240,7 +240,14 @@ export default {
 
             // set the time that will be displayed in the DOM
             parsedOrder.displayTime = this.getDisplayTime(parsedOrder.arrivalTime);
-
+            
+            if (unparsedOrder.id_miza !== null) {
+                parsedOrder.tableName = unparsedOrder.id_miza;
+            }
+            else {
+                parsedOrder.tableName = "Check in";
+            }
+            
             // parse the orderItems
             Object.keys(unparsedOrder.jedi).forEach(indexJedi => {
                 let unparsedItem = unparsedOrder.jedi[indexJedi];
@@ -292,9 +299,13 @@ export default {
 
                         // TODO checked in users
                         if (response.data.checked_in_orders) {
+                            let checkedIn = response.data.checked_in_orders;
                             for (let i = self.orderCards.length - 1; i >= 0; i--) {
-                                if (response.data.checked_in_orders.includes(self.orderCards[i].orderId)) {
-                                    self.orderCards[i].isHere = true;
+                                for (let j = 0; j < checkedIn.length; j++) {
+                                    if (checkedIn[j].id_narocila === self.orderCards[i].orderId) {
+                                        self.orderCards[i].isHere = true;
+                                        self.orderCards[i].tableName = checkedIn.qr_koda;
+                                    }
                                 }
                             }
                         }

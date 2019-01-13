@@ -2,7 +2,7 @@
     <div id="home">
         <div id="nav">
             <div id="su-top-bar">
-                <img src="../assets/icons/logo.svg">
+                <img src="../assets/icons/logo2.svg">
                 <p>ServeUp</p>
             </div>
             <router-link to="/home/orders">
